@@ -15,7 +15,7 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
     console.log(`connected to ${DB_URL}`)
     return seedDB(articles, comments, topics, users)
   })
-  .then(() => {
+  .then(([userDocs, topicDocs, articleDocs, commentDocs]) => {
     mongoose.disconnect();
   })
   .then(() => {

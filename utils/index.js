@@ -10,9 +10,9 @@ const formatUsers = (userData) => {
   })
 }
 
-const createRefObj = (docs) => {
+const createRefObj = (docs, key) => {
   return docs.reduce((refObj, doc, index) => {
-    refObj[doc["username"]] = docs[index]._id
+    refObj[doc[key]] = docs[index]._id
     return refObj;
   }, {})
 }
@@ -22,9 +22,23 @@ const formatArticles = (articleData, userRefObj) => {
     return {
       ...articleDatum,
       belongs_to: articleDatum.topic,
-      created_by: userRefObj[articleDatum.created_by]
+      created_by: userRefObj[articleDatum.created_by],
+      votes: 0
     }
   })
 }
 
-module.exports = { formatTopics, formatUsers, formatArticles, createRefObj}
+const formatComments = (commentData, userRefObj, articleRefObj) => {
+  return commentData.map(commentDatum => {
+    return {
+      ...commentData,
+      body: commentDatum.body,
+      votes: commentDatum.vote,
+      created_at: commentDatum.created_at,
+      created_by: userRefObj[commentDatum.created_by],
+      belongs_to: articleRefObj[commentDatum.belongs_to]
+    }
+  })
+}
+
+module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments }
