@@ -1,7 +1,13 @@
 const formatTopics = (topicData) => {
   return topicData.map(topicDatum => {
-      return {...topicDatum}
+    return { ...topicDatum }
   })
 }
 
-module.exports = {formatTopics}
+const formatUsers = (userData) => {
+  return userData.map(userDatum => {
+    return { ...userDatum }
+  })
+}
+
+module.exports = { formatTopics, formatUsers }
