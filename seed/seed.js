@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { Article, Comment, Topic, User } = require('../models');
-const { formatTopics, formatUsers, formatArticles, createRefObj, formatComments } = require('../utils')
-// require in any utils functions here
+const { formatTopics, formatUsers, formatArticles, createRefObj, formatComments } = require('../utils');
 
 const seedDB = (articleData, commentData, topicData, userData) => {
   console.log('seeding the database');

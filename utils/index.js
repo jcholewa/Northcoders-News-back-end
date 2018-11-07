@@ -32,7 +32,7 @@ const formatComments = (commentData, userRefObj, articleRefObj) => {
   return commentData.map(commentDatum => {
     return {
       body: commentDatum.body,
-      votes: commentDatum.vote,
+      votes: commentDatum.votes || 0,
       created_at: commentDatum.created_at,
       created_by: userRefObj[commentDatum.created_by],
       belongs_to: articleRefObj[commentDatum.belongs_to]
