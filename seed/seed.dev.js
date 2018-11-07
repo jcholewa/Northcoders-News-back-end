@@ -12,6 +12,7 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
     return seedDB(articles, comments, topics, users)
   })
   .then(([userDocs, topicDocs, articleDocs, commentDocs]) => {
+    // console.log(articleDocs)
     mongoose.disconnect();
   })
   .then(() => {
