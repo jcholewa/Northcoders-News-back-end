@@ -23,7 +23,7 @@ const formatArticles = (articleData, userRefObj) => {
       ...articleDatum,
       belongs_to: articleDatum.topic,
       created_by: userRefObj[articleDatum.created_by],
-      votes: 0
+      votes: articleDatum.votes || 0
     }
   })
 }
@@ -31,7 +31,6 @@ const formatArticles = (articleData, userRefObj) => {
 const formatComments = (commentData, userRefObj, articleRefObj) => {
   return commentData.map(commentDatum => {
     return {
-      ...commentData,
       body: commentDatum.body,
       votes: commentDatum.vote,
       created_at: commentDatum.created_at,
