@@ -1,0 +1,7 @@
+exports.changeVotesOfComment = () => {
+
+}
+
+exports.deleteComment = () => {
+
+}
