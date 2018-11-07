@@ -5,17 +5,25 @@ const app = require('../app');
 const request = supertest(app);
 const seedDB = require('../seed/seed');
 
-const articles = ('../seed/testData/articles.json');
-const comments = ('../seed/testData/comments.json');
-const topics = ('../seed/testData/topics.json');
-const users = ('../seed/testData/users.json');
+const articles = require('../seed/testData/articles.json');
+const comments = require('../seed/testData/comments.json');
+const topics = require('../seed/testData/topics.json');
+const users = require('../seed/testData/users.json');
 
 describe('/articles', () => {
   let testData;
   beforeEach(() => {
     return seedDB(articles, comments, topics, users)
       .then(([userDocs, topicDocs, articleDocs, commentDocs]) => {
-        testData = userDocs, topicDocs, articleDocs, commentDocs;
+        testData = [userDocs, topicDocs, articleDocs, commentDocs];
       })
   })
+  it('GET status 200 array of all articles', () => {
+    return request
+      .get('/articles')
+      .expect(200)
+      .then(res => {
+        expect(res.body.articles.length).to.equal(4);
+      });
+  });
 })
