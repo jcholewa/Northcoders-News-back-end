@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
 app.use((err, req, res, next) => {
+  console.log(err)
   if (err.name === 'CastError') err.status = 400;
   res.status(err.status).send({ msg: err.message || err.msg });
 })

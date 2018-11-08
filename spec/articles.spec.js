@@ -27,12 +27,23 @@ describe('/articles', () => {
         expect(articles[0].title).to.equal(articleDocs[0].title);
       });
   });
-  it('GET returns status 200 and array of one article', () => {
-    return request
-      .get(`/api/articles/${articleDocs[0]._id}`)
-      .expect(200)
-      .then(res => {
-        expect(res.body.article.title).to.equal(articleDocs[0].title)
-      })
+  describe('/articles/:article_id', () => {
+    it('GET returns status 200 and array of one article', () => {
+      return request
+        .get(`/api/articles/${articleDocs[0]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.article.title).to.equal(articleDocs[0].title)
+        })
+    })
+    it('GET for an invalid ID returns a status 400 and error message', () => {
+      const id = '123'
+      return request
+        .get(`/api/articles/${id}`)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
+        })
+    })
   })
 })
