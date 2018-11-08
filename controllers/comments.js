@@ -17,9 +17,8 @@ exports.changeVotesOfComment = (req, res, next) => {
 }
 
 exports.deleteComment = (req, res, next) => {
-  // Comment.findOneAndRemove({id: commentID})
-  Comment.findOneAndDelete({id: req.params.comment_id})
-  .then(comment => {
-    res.status(200).send({message: 'comment deleted'})
-  })
+  Comment.findOneAndRemove({ id: req.params.comment_id })
+    .then(comment => {
+      res.status(200).send({ message: 'comment deleted' })
+    })
 }
