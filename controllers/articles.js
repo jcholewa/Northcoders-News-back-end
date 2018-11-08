@@ -1,4 +1,4 @@
-const { Article } = require('../models')
+const { Article, Comment } = require('../models')
 
 exports.getArticles = (req, res, next) => {
   Article.find()
@@ -18,10 +18,18 @@ exports.getOneArticle = (req, res, next) => {
     .catch(next)
 }
 
-exports.getCommentsForArticle = () => {
-
+exports.getCommentsForArticle = (req, res, next) => {
+  const articleID = req.params.article_id;
+  Comment.find({ belongs_to: articleID })
+    .then(comments => {
+      res.status(200).send({ comments })
+    })
+    .catch(next)
 }
 
+
+// Add a new article to a topic. This route requires a JSON body with title and body key value pairs
+// # e.g: `{ "title": "new article", "body": "This is my new article content", "created_by": "user_id goes here"}`
 exports.addCommentToArticle = () => {
 
 }

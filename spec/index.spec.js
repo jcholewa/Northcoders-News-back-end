@@ -59,6 +59,17 @@ describe('/api', () => {
           })
       })
     })
+    describe.only('/articles/:article_id/comments', () => {
+      it('GET returns status 200 and array of comments for one article', () => {
+        return request
+          .get(`/api/articles/${articleDocs[0]._id}/comments`)
+          .expect(200)
+          .then(res => {
+            // CHANGE THIS SO IT's NOT HARDCODED IN
+            expect(res.body.comments.length).to.equal(2);
+          })
+      })
+    })
   })
   describe('/users', () => {
     describe('/users/:username', () => {
@@ -94,11 +105,13 @@ describe('/api', () => {
     })
     it('GET returns status 200 and array of all articles with defined topic slug', () => {
       let noOfArticles;
+
+      // CHANGE THIS TO BE A FOR EACH OVER ARTICLEDOCS RATHER THAN CALLING THE DATABASE
       const countArticles = (docs) => {
         Article.count({ belongs_to: docs[1].slug })
-        .then(articles => {
-          noOfArticles = articles;
-        })
+          .then(articles => {
+            noOfArticles = articles;
+          })
       }
       countArticles(topicDocs)
 

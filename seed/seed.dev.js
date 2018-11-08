@@ -9,6 +9,7 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
     return seedDB(data)
   })
   .then(([userDocs, topicDocs, articleDocs, commentDocs]) => {
+    console.log(articleDocs)
     mongoose.disconnect();
   })
   .then(() => {
