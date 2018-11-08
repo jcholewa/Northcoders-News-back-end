@@ -9,9 +9,10 @@ exports.getArticles = (req, res, next) => {
 }
 
 exports.getOneArticle = (req, res, next) => {
-  const articleID = req.params.article_id;
-  Article.findOne({ _id: articleID })
+  const { articleID } = req.params;
+  Article.findById(articleID)
     .then(article => {
+      if (!article) return Promise.reject({ status: 404, msg: `Article not found for ID: ${articleID}` });
       res.status(200).send({ article })
     })
     .catch(next)
