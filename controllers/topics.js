@@ -17,6 +17,19 @@ exports.getArticlesForTopic = (req, res, next) => {
     .catch(next)
 }
 
-exports.addArticleToTopic = () => {
+exports.addArticleToTopic = (req, res, next) => {
+  const newArticle = new Article({
+    title: req.body.title,
+    body: req.body.body,
+    votes: req.body.votes,
+    created_by: req.body.created_by,
+    belongs_to: req.params.topic_slug
+  })
+
+  return Article.create(newArticle)
+    .then(article => {
+      res.status(201).send({ article })
+    })
+    .catch(next)
 
 }

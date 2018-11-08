@@ -59,7 +59,7 @@ describe('/api', () => {
           })
       })
     })
-    describe.only('/articles/:article_id/comments', () => {
+    describe('/articles/:article_id/comments', () => {
       it('GET returns status 200 and array of comments for one article', () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
@@ -103,24 +103,41 @@ describe('/api', () => {
           expect(topics[0].slug).to.equal("mitch");
         })
     })
-    it('GET returns status 200 and array of all articles with defined topic slug', () => {
-      let noOfArticles;
+    describe('/api/topics:topic_slug', () => {
+      it('GET returns status 200 and array of all articles with defined topic slug', () => {
+        let noOfArticles;
 
-      // CHANGE THIS TO BE A FOR EACH OVER ARTICLEDOCS RATHER THAN CALLING THE DATABASE
-      const countArticles = (docs) => {
-        Article.count({ belongs_to: docs[1].slug })
-          .then(articles => {
-            noOfArticles = articles;
+        // CHANGE THIS TO BE A FOR EACH OVER ARTICLEDOCS RATHER THAN CALLING THE DATABASE
+        const countArticles = (docs) => {
+          Article.count({ belongs_to: docs[1].slug })
+            .then(articles => {
+              noOfArticles = articles;
+            })
+        }
+        countArticles(topicDocs)
+
+        return request
+          .get(`/api/topics/${topicDocs[1].slug}/articles`)
+          .expect(200)
+          .then((res) => {
+            expect(res.body.articles.length).to.equal(noOfArticles);
           })
-      }
-      countArticles(topicDocs)
-
-      return request
-        .get(`/api/topics/${topicDocs[1].slug}/articles`)
-        .expect(200)
-        .then((res) => {
-          expect(res.body.articles.length).to.equal(noOfArticles);
-        })
+      })
+      it('POST returns status 201 and array containing new article', () => {
+        const newArticle = {
+          title: 'New Article',
+          body: 'Here is some content for the new article',
+          votes: 5,
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/topics/${topicDocs[1].slug}/articles`)
+          .send(newArticle)
+          .expect(201)
+          .then(({ body: { article } }) => {
+            expect(article.belongs_to).to.equal(topicDocs[1].slug);
+          })
+      })
     })
   })
 })
