@@ -5,17 +5,12 @@ const request = supertest(app);
 const mongoose = require('mongoose');
 const { expect } = require('chai');
 const seedDB = require('../seed/seed');
-
-// make an index file for these (see film night for example? -- use one variable for it)
-const articles = require('../seed/testData/articles.json');
-const comments = require('../seed/testData/comments.json');
-const topics = require('../seed/testData/topics.json');
-const users = require('../seed/testData/users.json');
+const data = require('../seed/testData/');
 
 describe('/articles', () => {
   let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId();
   beforeEach(() => {
-    return seedDB({ articles, comments, topics, users }) // use 1 variable here - don't pass as an object
+    return seedDB( data )
       .then(docs => {
         [userDocs, topicDocs, articleDocs, commentDocs] = docs;
       })

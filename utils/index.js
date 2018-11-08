@@ -5,6 +5,7 @@ const formatTopics = (topicData) => {
 }
 
 const formatUsers = (userData) => {
+  // console.log(userData)
   return userData.map(userDatum => {
     return { ...userDatum }
   })
