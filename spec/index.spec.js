@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { expect } = require('chai');
 const seedDB = require('../seed/seed');
 const data = require('../seed/testData');
+const { Article } = require('../models');
 
 describe('/api', () => {
   let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId();
@@ -89,6 +90,23 @@ describe('/api', () => {
           expect(topics.length).to.equal(topicDocs.length);
           expect(topics[1].title).to.equal("Cats");
           expect(topics[0].slug).to.equal("mitch");
+        })
+    })
+    it('GET returns status 200 and array of all articles with defined topic slug', () => {
+      let noOfArticles;
+      const countArticles = (docs) => {
+        Article.count({ belongs_to: docs[1].slug })
+        .then(articles => {
+          noOfArticles = articles;
+        })
+      }
+      countArticles(topicDocs)
+
+      return request
+        .get(`/api/topics/${topicDocs[1].slug}/articles`)
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles.length).to.equal(noOfArticles);
         })
     })
   })
