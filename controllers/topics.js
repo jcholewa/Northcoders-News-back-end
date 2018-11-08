@@ -28,6 +28,8 @@ exports.addArticleToTopic = (req, res, next) => {
 
   Article.create(newArticle)
     .then(article => {
+      article = article.toJSON();
+      article["comment_count"] = 0;
       res.status(201).send({ article })
     })
     .catch(next)

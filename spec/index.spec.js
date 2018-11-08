@@ -28,6 +28,8 @@ describe('/api', () => {
         .then(({ body: { articles } }) => {
           expect(articles.length).to.equal(articleDocs.length);
           expect(articles[0].title).to.equal(articleDocs[0].title);
+          // CHANGE SO NOT HARDCODED IN
+          // expect(articles[0].comment_count).to.equal(2);
         });
     });
     describe('/articles/:article_id', () => {
@@ -171,6 +173,7 @@ describe('/api', () => {
           .expect(201)
           .then(({ body: { article } }) => {
             expect(article.belongs_to).to.equal(topicDocs[1].slug);
+            expect(article.comment_count).to.equal(0);
           })
       })
     })

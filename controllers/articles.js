@@ -1,10 +1,30 @@
 const { Article, Comment } = require('../models')
 
 exports.getArticles = (req, res, next) => {
+  let count = 0;
+  let articles = [];
   Article.find()
     .then(articles => {
       res.status(200).send({ articles })
     })
+    // Article.find()
+    //   .then(foundArticles => {
+    //     foundArticles.map(article => {
+    //       Comment.count({ belongs_to: article._id })
+    //         .then(comments => {
+    //           article = article.toJSON()
+    //           article["comment_count"] = comments;
+    //           foundArticles.push(article)
+    //           count++;
+    //           if (count === foundArticles.length) {
+    //             // console.log(articles)
+    //             res.status(200).send({ foundArticles})
+    //           }
+    //         })
+
+    //     })
+
+    //   })
     .catch(next)
 }
 
