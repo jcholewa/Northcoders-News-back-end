@@ -6,6 +6,9 @@ exports.getArticles = (req, res, next) => {
       res.status(200).send({ articles })
     })
     .catch(next)
+
+  // find article by id
+  // article.set(votes: x)
 }
 
 exports.getOneArticle = (req, res, next) => {
@@ -27,7 +30,6 @@ exports.getCommentsForArticle = (req, res, next) => {
     .catch(next)
 }
 
-
 exports.addCommentToArticle = (req, res, next) => {
   const newComment = new Comment({
     body: req.body.body,
@@ -35,14 +37,27 @@ exports.addCommentToArticle = (req, res, next) => {
     belongs_to: req.body.belongs_to,
     created_by: req.body.created_by
   })
-  return Comment.create(newComment)
+  return newComment.save()
     .then(comment => {
       res.status(201).send({ comment })
     })
     .catch(next)
 }
 
-exports.changeVotesOfArticle = () => {
+exports.changeVotesOfArticle = (req, res, next) => {
+  Article.findById(req.params.article_id)
+    .then(foundArticle => {
 
+      if (req.query.vote === 'down') {
+        foundArticle.set({ vote: foundArticle.vote-- })
+        return foundArticle.save()
+      } else if (req.query.vote === 'up') {
+        foundArticle.set({ vote: foundArticle.vote++ })
+        return foundArticle.save()
+      }
+    })
+    .then(article => {
+      res.status(200).send({ article })
+    })
 }
 

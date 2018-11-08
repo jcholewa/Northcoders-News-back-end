@@ -50,12 +50,30 @@ describe('/api', () => {
             expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
           })
       })
-      it(`GET for an non-existent ID returns a status 404 and error message`, () => {
+      it('GET for an non-existent ID returns a status 404 and error message', () => {
         return request
           .get(`/api/articles/${wrongID}`)
           .expect(404)
           .then(res => {
             expect(res.body.msg).to.equal(`Article not found for ID: ${wrongID}`);
+          })
+      })
+      it('PATCH returns status 204 and array containing updated article with votes minus 1', () => {
+        return request
+          .patch(`/api/articles/${articleDocs[0]._id}?vote=down`)
+          .expect(200)
+          .then(res => {
+            expect(res.body.article.title).to.equal(articleDocs[0].title);
+            expect(res.body.article.votes).to.equal(articleDocs[0].votes--);
+          })
+      })
+      it('PATCH returns status 204 and array containing updated article with votes plus 1', () => {
+        return request
+          .patch(`/api/articles/${articleDocs[0]._id}?vote=up`)
+          .expect(200)
+          .then(res => {
+            expect(res.body.article.title).to.equal(articleDocs[0].title);
+            expect(res.body.article.votes).to.equal(articleDocs[0].votes++);
           })
       })
     })

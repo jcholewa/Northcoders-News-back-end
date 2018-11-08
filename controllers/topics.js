@@ -26,7 +26,7 @@ exports.addArticleToTopic = (req, res, next) => {
     belongs_to: req.params.topic_slug
   })
 
-  return Article.create(newArticle)
+  Article.create(newArticle)
     .then(article => {
       res.status(201).send({ article })
     })
