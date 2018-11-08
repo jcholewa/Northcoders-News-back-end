@@ -13,7 +13,6 @@ describe('/api', () => {
   beforeEach(() => {
     return seedDB(data)
       .then(docs => {
-        // console.log(docs)
         [userDocs, topicDocs, articleDocs, commentDocs] = docs;
       })
   })
@@ -36,8 +35,6 @@ describe('/api', () => {
           .get(`/api/articles/${articleDocs[0]._id}`)
           .expect(200)
           .then(res => {
-            console.log(res.body)
-            console.log(articleDocs)
             expect(res.body.article.title).to.equal(articleDocs[0].title)
             expect(res.body.article.topic).to.equal(articleDocs[0].topic)
             expect(res.body.article.body).to.equal(articleDocs[0].body)
@@ -63,10 +60,8 @@ describe('/api', () => {
     })
   })
   describe('/users', () => {
-
     describe('/users/:username', () => {
       it('GET returns status 200 and array of one user', () => {
-
         return request
           .get(`/api/users/${userDocs[0].username}`)
           .expect(200)
@@ -85,5 +80,16 @@ describe('/api', () => {
       })
     })
   })
-
+  describe('/topics', () => {
+    it('GET returns status 200 and array of all topics', () => {
+      return request
+        .get('/api/topics')
+        .expect(200)
+        .then(({ body: { topics } }) => {
+          expect(topics.length).to.equal(topicDocs.length);
+          expect(topics[1].title).to.equal("Cats");
+          expect(topics[0].slug).to.equal("mitch");
+        })
+    })
+  })
 })
