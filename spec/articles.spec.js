@@ -34,6 +34,8 @@ describe('/articles', () => {
         .expect(200)
         .then(res => {
           expect(res.body.article.title).to.equal(articleDocs[0].title)
+          expect(res.body.article.topic).to.equal(articleDocs[0].topic)
+          expect(res.body.article.body).to.equal(articleDocs[0].body)
         })
     })
     it('GET for an invalid ID returns a status 400 and error message', () => {
