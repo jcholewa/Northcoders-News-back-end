@@ -29,7 +29,17 @@ exports.getCommentsForArticle = (req, res, next) => {
 
 
 exports.addCommentToArticle = (req, res, next) => {
-  
+  const newComment = new Comment({
+    body: req.body.body,
+    votes: req.body.votes,
+    belongs_to: req.body.belongs_to,
+    created_by: req.body.created_by
+  })
+  return Comment.create(newComment)
+    .then(comment => {
+      res.status(201).send({ comment })
+    })
+    .catch(next)
 }
 
 exports.changeVotesOfArticle = () => {

@@ -69,6 +69,21 @@ describe('/api', () => {
             expect(res.body.comments.length).to.equal(2);
           })
       })
+      it('POST returns status 201 and array containing new comment', () => {
+        const newComment = {
+          body: "This is a new comment for the article",
+          votes: 2,
+          belongs_to: articleDocs[0]._id,
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .send(newComment)
+          .expect(201)
+          .then(({ body: { comment } }) => {
+            expect(comment.body).to.equal(newComment.body);
+          })
+      })
     })
   })
   describe('/users', () => {
