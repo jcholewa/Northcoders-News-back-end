@@ -6,9 +6,6 @@ exports.getArticles = (req, res, next) => {
       res.status(200).send({ articles })
     })
     .catch(next)
-
-  // find article by id
-  // article.set(votes: x)
 }
 
 exports.getOneArticle = (req, res, next) => {

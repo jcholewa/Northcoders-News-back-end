@@ -67,7 +67,7 @@ describe('/api', () => {
             expect(res.body.article.votes).to.equal(articleDocs[0].votes--);
           })
       })
-      it('PATCH returns status 204 and array containing updated article with votes plus 1', () => {
+      it('PATCH returns status 200 and array containing updated article with votes plus 1', () => {
         return request
           .patch(`/api/articles/${articleDocs[0]._id}?vote=up`)
           .expect(200)
@@ -171,6 +171,32 @@ describe('/api', () => {
             expect(article.belongs_to).to.equal(topicDocs[1].slug);
           })
       })
+    })
+  })
+  describe('/comments', () => {
+    it('PATCH returns status 200 and array containing updated comment with votes plus 1', () => {
+      return request
+        .patch(`/api/comments/${commentDocs[0]._id}?vote=up`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.comment.votes).to.equal(commentDocs[0].votes++)
+        })
+    })
+    it('PATCH returns status 200 and array containing updated comment with votes minus 1', () => {
+      return request
+        .patch(`/api/comments/${commentDocs[0]._id}?vote=down`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.comment.votes).to.equal(commentDocs[0].votes--)
+        })
+    })
+    it('DELETE returns status 200 and message confirming comment was deleted', () => {
+      return request
+        .delete(`/api/comments/${commentDocs[0]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.message).to.equal('comment deleted')
+        })
     })
   })
 })
