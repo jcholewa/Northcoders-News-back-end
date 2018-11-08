@@ -45,5 +45,13 @@ describe('/articles', () => {
           expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
         })
     })
+    it(`GET for an non-existent ID returns a status 404 and error message`, () => {
+      return request
+        .get(`/api/articles/${wrongID}`)
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal(`Article not found for ID: ${wrongID}`);
+        })
+    })
   })
 })
