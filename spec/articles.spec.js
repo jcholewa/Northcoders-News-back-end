@@ -10,7 +10,7 @@ const data = require('../seed/testData/');
 describe('/articles', () => {
   let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId();
   beforeEach(() => {
-    return seedDB( data )
+    return seedDB(data)
       .then(docs => {
         [userDocs, topicDocs, articleDocs, commentDocs] = docs;
       })
@@ -27,4 +27,12 @@ describe('/articles', () => {
         expect(articles[0].title).to.equal(articleDocs[0].title);
       });
   });
+  it('GET returns status 200 and array of one article', () => {
+    return request
+      .get(`/api/articles/${articleDocs[0]._id}`)
+      .expect(200)
+      .then(res => {
+        expect(res.body.article.title).to.equal(articleDocs[0].title)
+      })
+  })
 })
