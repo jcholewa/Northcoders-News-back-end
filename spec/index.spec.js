@@ -119,6 +119,7 @@ describe('/api', () => {
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
           .expect(200)
           .then(res => {
+            console.log(res.body.comments)
             // CHANGE THIS SO IT's NOT HARDCODED IN
             expect(res.body.comments.length).to.equal(2);
           })

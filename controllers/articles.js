@@ -44,10 +44,12 @@ exports.getOneArticle = (req, res, next) => {
 exports.getCommentsForArticle = (req, res, next) => {
   const articleID = req.params.article_id;
   Comment.find({ belongs_to: articleID })
-    // .populate('created_by')
-    // .populate('belongs_to')
     .then(comments => {
-      // console.log(comments)
+      return Promise.all(comments.map(comment => {
+        return comment.populate('created_by').populate('belongs_to').execPopulate()
+      }))
+    })
+    .then(comments => {
       res.status(200).send({ comments })
     })
     .catch(next)
