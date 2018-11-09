@@ -119,9 +119,10 @@ describe('/api', () => {
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
           .expect(200)
           .then(res => {
-            console.log(res.body.comments)
             // CHANGE THIS SO IT's NOT HARDCODED IN
             expect(res.body.comments.length).to.equal(2);
+            expect(res.body.comments[0].created_by).to.be.object();
+            expect(res.body.comments[1].belongs_to).to.be.object();
           })
       })
       it('GET for an invalid article ID returns a status 400 and error message', () => {
