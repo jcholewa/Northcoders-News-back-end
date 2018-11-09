@@ -131,7 +131,7 @@ describe('/api', () => {
           })
       })
     })
-    describe.only('/articles/:article_id/comments', () => {
+    describe('/articles/:article_id/comments', () => {
       it('GET returns status 200 and array of comments for one article, (getCommentsForArticle)', () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
@@ -190,29 +190,6 @@ describe('/api', () => {
           .expect(400)
           .then(res => {
             expect(res.body.msg).to.equal('comments validation failed: body: Cast to String failed for value "{ test: \'testy test test\' }" at path "body"')
-          })
-      })
-    })
-  })
-  describe('/users', () => {
-    describe('/users/:username, (getOneUser)', () => {
-      it('GET returns status 200 and array of one user', () => {
-        return request
-          .get(`/api/users/${userDocs[0].username}`)
-          .expect(200)
-          .then(res => {
-            expect(res.body.user.username).to.equal(userDocs[0].username);
-            expect(res.body.user.name).to.equal(userDocs[0].name);
-            expect(res.body.user.avatar_url).to.equal(userDocs[0].avatar_url)
-          })
-      })
-      it(`GET for an non-existent username returns a status 404 and error message, (getOneUser)`, () => {
-        const wrongUserName = 1234;
-        return request
-          .get(`/api/users/${wrongUserName}`)
-          .expect(404)
-          .then(res => {
-            expect(res.body.msg).to.equal(`User not found for username: ${wrongUserName}`);
           })
       })
     })
@@ -291,6 +268,29 @@ describe('/api', () => {
         .then(res => {
           expect(res.body.message).to.equal('comment deleted')
         })
+    })
+  })
+  describe('/users', () => {
+    describe('/users/:username, (getOneUser)', () => {
+      it('GET returns status 200 and array of one user', () => {
+        return request
+          .get(`/api/users/${userDocs[0].username}`)
+          .expect(200)
+          .then(res => {
+            expect(res.body.user.username).to.equal(userDocs[0].username);
+            expect(res.body.user.name).to.equal(userDocs[0].name);
+            expect(res.body.user.avatar_url).to.equal(userDocs[0].avatar_url)
+          })
+      })
+      it(`GET for an non-existent username returns a status 404 and error message, (getOneUser)`, () => {
+        const wrongUserName = 1234;
+        return request
+          .get(`/api/users/${wrongUserName}`)
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal(`User not found for username: ${wrongUserName}`);
+          })
+      })
     })
   })
 })
