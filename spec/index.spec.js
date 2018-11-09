@@ -171,17 +171,19 @@ describe('/api', () => {
       })
     })
   })
-  describe('/users', () => {
+  describe.only('/users', () => {
     describe('/users/:username, (getOneUser)', () => {
       it('GET returns status 200 and array of one user', () => {
         return request
           .get(`/api/users/${userDocs[0].username}`)
           .expect(200)
           .then(res => {
-            expect(res.body.user.username).to.equal(userDocs[0].username)
+            expect(res.body.user.username).to.equal(userDocs[0].username);
+            expect(res.body.user.name).to.equal(userDocs[0].name);
+            expect(res.body.user.avatar_url).to.equal(userDocs[0].avatar_url)
           })
       })
-      it(`GET for an non-existent ID returns a status 404 and error message, (getOneUser)`, () => {
+      it(`GET for an non-existent username returns a status 404 and error message, (getOneUser)`, () => {
         const wrongUserName = 1234;
         return request
           .get(`/api/users/${wrongUserName}`)
