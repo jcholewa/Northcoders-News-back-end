@@ -1,4 +1,4 @@
-const { Article, Comment, User } = require('../models')
+const { Article, Comment } = require('../models')
 
 exports.getArticles = (req, res, next) => {
   Article.find()

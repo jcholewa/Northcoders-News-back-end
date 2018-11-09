@@ -131,7 +131,7 @@ describe('/api', () => {
           })
       })
     })
-    describe('/articles/:article_id/comments', () => {
+    describe.only('/articles/:article_id/comments', () => {
       it('GET returns status 200 and array of comments for one article, (getCommentsForArticle)', () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
@@ -177,13 +177,18 @@ describe('/api', () => {
             expect(comment.belongs_to).to.be.object();
           })
       })
-      it('POST for an invalid ID returns a status 400 and error message, (addCommentToArticle)', () => {
-        const id = '123'
+      it('POST for invalid comment body returns status 400 and error message', () => {
+        const newComment = {
+          body: {test: 'testy test test'},
+          votes: 2,
+          belongs_to: articleDocs[0]._id,
+          created_by: userDocs[0]._id
+        }
         return request
-          .post(`/api/articles/${id}/comments`)
-          .expect(404)
+          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .expect(400)
           .then(res => {
-            expect(res.body.msg).to.equal('Page Not Found');
+            expect(res.body.msg).to.equal('comments validation failed: body: Path `body` is required., belongs_to: Path `belongs_to` is required., created_by: Path `created_by` is required.')
           })
       })
     })
