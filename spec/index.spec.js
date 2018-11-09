@@ -12,9 +12,7 @@ const asserttype = require('chai-asserttype');
 chai.use(asserttype);
 
 describe('/api', () => {
-  let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId(), commentObj;
-
-
+  let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId(), commentObj, articleObj;
 
   beforeEach(() => {
     return seedDB(data)
@@ -30,9 +28,18 @@ describe('/api', () => {
           }
           return refObj
         }, {})
+
+        articleObj = articleDocs.reduce((refObj, doc) => {
+          if (refObj[doc.belongs_to] != undefined) {
+            refObj[doc.belongs_to] += 1;
+          }
+          else {
+            refObj[doc.belongs_to] = 1;
+          }
+          return refObj
+        }, {})
       })
   })
-
   after(() => {
     return mongoose.disconnect();
   })
@@ -219,24 +226,14 @@ describe('/api', () => {
           expect(topics[0].slug).to.equal("mitch");
         })
     })
-    describe.only('/api/topics/:topic_slug/articles', () => {
+    describe('/api/topics/:topic_slug/articles', () => {
       it('GET returns status 200 and array of all articles with defined topic slug, (getArticlesForTopic)', () => {
-        let noOfArticles;
-
-        // CHANGE THIS TO BE A FOR EACH OVER ARTICLEDOCS RATHER THAN CALLING THE DATABASE
-        const countArticles = (docs) => {
-          Article.count({ belongs_to: docs[1].slug })
-            .then(articles => {
-              noOfArticles = articles;
-            })
-        }
-        countArticles(topicDocs)
 
         return request
           .get(`/api/topics/${topicDocs[1].slug}/articles`)
           .expect(200)
           .then((res) => {
-            expect(res.body.articles.length).to.equal(noOfArticles);
+            expect(res.body.articles.length).to.equal(articleObj[topicDocs[1].slug]);
             expect(res.body.articles[1].created_by).to.be.object();
             expect(res.body.articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
 
