@@ -2,6 +2,8 @@ const { Comment } = require('../models');
 
 exports.changeVotesOfComment = (req, res, next) => {
   Comment.findById(req.params.comment_id)
+  .populate('created_by')
+  .populate('belongs_to')
     .then(foundComment => {
       if (req.query.vote === 'down') {
         foundComment.set({ vote: foundComment.vote-- })
