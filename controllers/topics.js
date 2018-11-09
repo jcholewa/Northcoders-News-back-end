@@ -19,9 +19,9 @@ exports.getArticlesForTopic = (req, res, next) => {
         Promise.all(articles.map(article => {
           return article.populate('created_by').execPopulate()
         }))
-        .then(articles => {
-        res.status(200).send({ articles })
-        })
+          .then(articles => {
+            res.status(200).send({ articles })
+          })
       }
     })
     .catch(next)
@@ -38,10 +38,12 @@ exports.addArticleToTopic = (req, res, next) => {
 
   Article.create(newArticle)
     .then(article => {
+      return article.populate('created_by').execPopulate()
+    })
+    .then(article => {
       article = article.toJSON();
       article["comment_count"] = 0;
       res.status(201).send({ article })
     })
     .catch(next)
-
 }

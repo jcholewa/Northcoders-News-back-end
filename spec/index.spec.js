@@ -156,17 +156,19 @@ describe('/api', () => {
           .then(({ body: { comment } }) => {
             expect(comment.body).to.equal(newComment.body);
             expect(comment.created_by.username).to.equal(userDocs[0].username)
+            expect(comment.created_by).to.be.object();
+            expect(comment.belongs_to).to.be.object();
           })
       })
-      // it('POST for an invalid ID returns a status 400 and error message', () => {
-      //   const id = '123'
-      //   return request
-      //     .patch(`/api/articles/${id}/comments`)
-      //     .expect(404)
-      //     .then(res => {
-      //       expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
-      //     })
-      // })
+      it('POST for an invalid ID returns a status 400 and error message', () => {
+        const id = '123'
+        return request
+          .patch(`/api/articles/${id}/comments`)
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal('Page Not Found');
+          })
+      })
     })
   })
   describe('/users', () => {
@@ -245,6 +247,7 @@ describe('/api', () => {
           .then(({ body: { article } }) => {
             expect(article.belongs_to).to.equal(topicDocs[1].slug);
             expect(article.comment_count).to.equal(0);
+            expect(article.created_by).to.be.object();
           })
       })
     })

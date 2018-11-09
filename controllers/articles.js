@@ -62,14 +62,13 @@ exports.addCommentToArticle = (req, res, next) => {
     belongs_to: req.body.belongs_to,
     created_by: req.body.created_by
   })
-  newComment.populate('created_by')
-    .populate('belongs_to').execPopulate()
+  Comment.create(newComment)
     .then(comment => {
-      // if (!comment.created_by || !comment.belongs_to) {
-      //   return Promise.reject({ status: 404, msg: `Article not found for ID: ${articleID}` });
-      // } else {
+      return comment.populate('created_by').populate('belongs_to')
+      .execPopulate()
+    })
+    .then(comment => {
       res.status(201).send({ comment })
-      // }
     })
     .catch(next)
 }
