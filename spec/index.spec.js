@@ -32,7 +32,7 @@ describe('/api', () => {
         expect(res.body.msg).to.equal('Page Not Found')
       })
   })
-  describe('/articles', () => {
+  describe.only('/articles', () => {
     it('GET returns status 200 and array of all articles (getArticles)', () => {
       return request
         .get('/api/articles')
@@ -40,9 +40,18 @@ describe('/api', () => {
         .then(({ body: { articles } }) => {
           expect(articles.length).to.equal(articleDocs.length);
           expect(articles[0].title).to.equal(articleDocs[0].title);
-          // CHANGE SO NOT HARDCODED IN
-          expect(articles[0].comment_count).to.equal(2);
-          expect(articles[1].comment_count).to.equal(2);
+          const commentObj = commentDocs.reduce((refObj, doc) => {
+            if (refObj[doc.belongs_to] != undefined) {
+              refObj[doc.belongs_to] += 1;
+            }
+            else {
+              refObj[doc.belongs_to] = 1;
+            }
+            return refObj
+          }, {})
+
+          expect(articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
+          expect(articles[1].comment_count).to.equal(commentObj[articleDocs[1]._id]);
           expect(articles[0].created_by).to.be.object();
         });
     });
@@ -171,7 +180,7 @@ describe('/api', () => {
       })
     })
   })
-  describe.only('/users', () => {
+  describe('/users', () => {
     describe('/users/:username, (getOneUser)', () => {
       it('GET returns status 200 and array of one user', () => {
         return request
