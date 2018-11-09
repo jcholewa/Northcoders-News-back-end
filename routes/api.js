@@ -13,5 +13,4 @@ apiRouter.use('/users', usersRouter);
 apiRouter.get('/') // serves an HTML page with documentation for all the available endpoints.
 */
 
-
 module.exports = apiRouter;

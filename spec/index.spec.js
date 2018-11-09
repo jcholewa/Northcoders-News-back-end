@@ -20,6 +20,15 @@ describe('/api', () => {
   after(() => {
     return mongoose.disconnect();
   })
+  // it('GET for a non-existent path returns status 404 and error message', () => {
+  //   const search = "artices"
+  //   return request
+  //     .get(`/api/${search}`)
+  //     .expect(404)
+  //     .then(res => {
+  //       expect(res.body.msg).to.equal('message')
+  //     })
+  // })
   describe('/articles', () => {
     it('GET returns status 200 and array of all articles', () => {
       return request
@@ -79,6 +88,23 @@ describe('/api', () => {
           .then(res => {
             expect(res.body.article.title).to.equal(articleDocs[0].title);
             expect(res.body.article.votes).to.equal(articleDocs[0].votes++);
+          })
+      })
+      it('PATCH for an invalid ID returns a status 400 and error message', () => {
+        const id = '123'
+        return request
+          .patch(`/api/articles/${id}?vote=up`)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
+          })
+      })
+      it('PATCH for a non-existent ID returns a status 404 and error message', () => {
+        return request
+          .patch(`/api/articles/${wrongID}?vote=up`)
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal(`Article not found for ID: ${wrongID}`);
           })
       })
     })

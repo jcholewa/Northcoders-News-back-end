@@ -78,17 +78,20 @@ exports.changeVotesOfArticle = (req, res, next) => {
   Article.findById(req.params.article_id)
     .populate('created_by')
     .then(foundArticle => {
-
-      if (req.query.vote === 'down') {
-        foundArticle.set({ vote: foundArticle.vote-- })
-        return foundArticle.save()
-      } else if (req.query.vote === 'up') {
-        foundArticle.set({ vote: foundArticle.vote++ })
-        return foundArticle.save()
+      if (!foundArticle) return Promise.reject({ status: 404, msg: `Article not found for ID: ${req.params.article_id}` });
+      else {
+        if (req.query.vote === 'down') {
+          foundArticle.set({ vote: foundArticle.vote-- })
+          return foundArticle.save()
+        } else if (req.query.vote === 'up') {
+          foundArticle.set({ vote: foundArticle.vote++ })
+          return foundArticle.save()
+        }
       }
     })
     .then(article => {
       res.status(200).send({ article })
     })
+    .catch(next)
 }
 
