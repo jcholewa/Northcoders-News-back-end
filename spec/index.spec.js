@@ -41,8 +41,9 @@ describe('/api', () => {
             expect(res.body.article.title).to.equal(articleDocs[0].title)
             expect(res.body.article.topic).to.equal(articleDocs[0].topic)
             expect(res.body.article.body).to.equal(articleDocs[0].body)
-            // CHANGE THIS SO NOT HARDCODED IN
+            // CHANGE THESE SO NOT HARDCODED IN
             expect(res.body.article.comment_count).to.equal(2)
+            expect(res.body.article.created_by.username).to.equal('butter_bridge');
           })
       })
       it('GET for an invalid ID returns a status 400 and error message', () => {
