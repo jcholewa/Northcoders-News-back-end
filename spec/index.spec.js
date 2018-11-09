@@ -222,6 +222,7 @@ describe('/api', () => {
           .then((res) => {
             expect(res.body.articles.length).to.equal(noOfArticles);
             expect(res.body.articles[1].created_by).to.be.object();
+            expect(res.body.articles[0].comment_count).to.equal(2);
           })
       })
       it('GET for a non-existent topic returns a status 404 and error message', () => {

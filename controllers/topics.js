@@ -1,4 +1,4 @@
-const { Topic, Article } = require('../models');
+const { Topic, Article, Comment } = require('../models');
 
 exports.getTopics = (req, res, next) => {
   Topic.find()
@@ -18,6 +18,14 @@ exports.getArticlesForTopic = (req, res, next) => {
       else {
         Promise.all(articles.map(article => {
           return article.populate('created_by').execPopulate()
+            .then(article => {
+              return Comment.count({ belongs_to: article._id })
+                .then(count => {
+                  article = article.toJSON();
+                  article["comment_count"] = count;
+                  return article;
+                })
+            })
         }))
           .then(articles => {
             res.status(200).send({ articles })
