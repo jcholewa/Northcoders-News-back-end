@@ -20,15 +20,15 @@ describe('/api', () => {
   after(() => {
     return mongoose.disconnect();
   })
-  // it('GET for a non-existent path returns status 404 and error message', () => {
-  //   const search = "artices"
-  //   return request
-  //     .get(`/api/${search}`)
-  //     .expect(404)
-  //     .then(res => {
-  //       expect(res.body.msg).to.equal('message')
-  //     })
-  // })
+  it('GET for a non-existent path returns status 404 and error message', () => {
+    const search = "artices"
+    return request
+      .get(`/api/${search}`)
+      .expect(404)
+      .then(res => {
+        expect(res.body.msg).to.equal('Page Not Found')
+      })
+  })
   describe('/articles', () => {
     it('GET returns status 200 and array of all articles', () => {
       return request
@@ -38,7 +38,8 @@ describe('/api', () => {
           expect(articles.length).to.equal(articleDocs.length);
           expect(articles[0].title).to.equal(articleDocs[0].title);
           // CHANGE SO NOT HARDCODED IN
-          // expect(articles[0].comment_count).to.equal(2);
+          expect(articles[0].comment_count).to.equal(2);
+          expect(articles[1].comment_count).to.equal(2);
         });
     });
     describe('/articles/:article_id', () => {
