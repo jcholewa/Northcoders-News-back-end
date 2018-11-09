@@ -259,7 +259,7 @@ describe('/api', () => {
         .patch(`/api/comments/${commentDocs[0]._id}?vote=up`)
         .expect(200)
         .then(res => {
-          expect(res.body.comment.votes).to.equal(commentDocs[0].votes++)
+          expect(res.body.comment.votes).to.equal(commentDocs[0].votes + 1)
         })
     })
     it('PATCH returns status 200 and array containing updated comment with votes minus 1, (changeVotesOfComment)', () => {
@@ -267,7 +267,7 @@ describe('/api', () => {
         .patch(`/api/comments/${commentDocs[0]._id}?vote=down`)
         .expect(200)
         .then(res => {
-          expect(res.body.comment.votes).to.equal(commentDocs[0].votes--)
+          expect(res.body.comment.votes).to.equal(commentDocs[0].votes - 1)
         })
     })
     it('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
