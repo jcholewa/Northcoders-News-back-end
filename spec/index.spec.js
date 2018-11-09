@@ -12,14 +12,27 @@ const asserttype = require('chai-asserttype');
 chai.use(asserttype);
 
 describe('/api', () => {
-  let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId();
+  let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId(), commentObj;
+
+
 
   beforeEach(() => {
     return seedDB(data)
       .then(docs => {
         [userDocs, topicDocs, articleDocs, commentDocs] = docs;
+
+        commentObj = commentDocs.reduce((refObj, doc) => {
+          if (refObj[doc.belongs_to] != undefined) {
+            refObj[doc.belongs_to] += 1;
+          }
+          else {
+            refObj[doc.belongs_to] = 1;
+          }
+          return refObj
+        }, {})
       })
   })
+
   after(() => {
     return mongoose.disconnect();
   })
@@ -32,7 +45,7 @@ describe('/api', () => {
         expect(res.body.msg).to.equal('Page Not Found')
       })
   })
-  describe.only('/articles', () => {
+  describe('/articles', () => {
     it('GET returns status 200 and array of all articles (getArticles)', () => {
       return request
         .get('/api/articles')
@@ -40,16 +53,6 @@ describe('/api', () => {
         .then(({ body: { articles } }) => {
           expect(articles.length).to.equal(articleDocs.length);
           expect(articles[0].title).to.equal(articleDocs[0].title);
-          const commentObj = commentDocs.reduce((refObj, doc) => {
-            if (refObj[doc.belongs_to] != undefined) {
-              refObj[doc.belongs_to] += 1;
-            }
-            else {
-              refObj[doc.belongs_to] = 1;
-            }
-            return refObj
-          }, {})
-
           expect(articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
           expect(articles[1].comment_count).to.equal(commentObj[articleDocs[1]._id]);
           expect(articles[0].created_by).to.be.object();
@@ -64,8 +67,8 @@ describe('/api', () => {
             expect(res.body.article.title).to.equal(articleDocs[0].title)
             expect(res.body.article.topic).to.equal(articleDocs[0].topic)
             expect(res.body.article.body).to.equal(articleDocs[0].body)
+            expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
             // CHANGE THESE SO NOT HARDCODED IN
-            expect(res.body.article.comment_count).to.equal(2)
             expect(res.body.article.created_by.username).to.equal('butter_bridge');
           })
       })
@@ -93,6 +96,7 @@ describe('/api', () => {
           .then(res => {
             expect(res.body.article.title).to.equal(articleDocs[0].title);
             expect(res.body.article.votes).to.equal(articleDocs[0].votes - 1);
+            expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
           })
       })
       it('PATCH returns status 200 and array containing updated article with votes plus 1, (changeVotesOfArticle)', () => {
@@ -102,6 +106,7 @@ describe('/api', () => {
           .then(res => {
             expect(res.body.article.title).to.equal(articleDocs[0].title);
             expect(res.body.article.votes).to.equal(articleDocs[0].votes + 1);
+            expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id])
           })
       })
       it('PATCH for an invalid ID returns a status 400 and error message, (changeVotesOfArticle)', () => {
@@ -214,7 +219,7 @@ describe('/api', () => {
           expect(topics[0].slug).to.equal("mitch");
         })
     })
-    describe('/api/topics/:topic_slug/articles', () => {
+    describe.only('/api/topics/:topic_slug/articles', () => {
       it('GET returns status 200 and array of all articles with defined topic slug, (getArticlesForTopic)', () => {
         let noOfArticles;
 
@@ -233,7 +238,8 @@ describe('/api', () => {
           .then((res) => {
             expect(res.body.articles.length).to.equal(noOfArticles);
             expect(res.body.articles[1].created_by).to.be.object();
-            expect(res.body.articles[0].comment_count).to.equal(2);
+            expect(res.body.articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
+
           })
       })
       it('GET for a non-existent topic returns a status 404 and error message, (getArticlesForTopic)', () => {
