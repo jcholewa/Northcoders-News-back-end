@@ -7,12 +7,13 @@
     "test": "mocha spec/",
     "start": "node listen.js",
     "dev": "nodemon listen.js",
-    "seed:dev": "node ./seed/seed.dev.js"  
+    "seed:dev": "node ./seed/seed.dev.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai-asserttype": "^1.0.5",
     "express": "^4.16.4",
     "mongoose": "^5.3.10"
   },

@@ -7,6 +7,9 @@ const { expect } = require('chai');
 const seedDB = require('../seed/seed');
 const data = require('../seed/testData');
 const { Article } = require('../models');
+const chai = require('chai');
+const asserttype = require('chai-asserttype');
+chai.use(asserttype);
 
 describe('/api', () => {
   let userDocs, topicDocs, articleDocs, commentDocs, wrongID = mongoose.Types.ObjectId();
@@ -40,6 +43,7 @@ describe('/api', () => {
           // CHANGE SO NOT HARDCODED IN
           expect(articles[0].comment_count).to.equal(2);
           expect(articles[1].comment_count).to.equal(2);
+          expect(articles[0].created_by).to.be.object();
         });
     });
     describe('/articles/:article_id', () => {
