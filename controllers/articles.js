@@ -78,7 +78,7 @@ exports.changeVotesOfArticle = (req, res, next) => {
     .populate('created_by')
     .then(foundArticle => {
       if (!foundArticle) return Promise.reject({ status: 404, msg: `Article not found for ID: ${req.params.article_id}` });
-      else req.query.vote === 'down' ? foundArticle.set({ vote: foundArticle.vote-- }) : foundArticle.set({ vote: foundArticle.vote++ })
+      else req.query.vote === 'down' ? foundArticle.votes-- : foundArticle.votes++
       return foundArticle.save()
         .then(article => {
           Comment.count({ belongs_to: article._id })

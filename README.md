@@ -30,20 +30,20 @@ Data has been provided for both testing and development environments so you will
 
 1.  You will need to seed the topics and users, followed by the articles and comments. 
 
-* Each article should have:
+* Each article should have: DONE
   * a `belongs_to` property, that references a topic's `slug`, and 
   * a `created_by` property that references a user's mongo `_id`. 
-* Each comment should have:
+* Each comment should have: DONE
   * a `created_by` property that references a user's mongo `_id` and 
   * a `belongs_to` property that references the specific article's mongo `_id`.
 
 ### Step 2 - Building and Testing
 
-1.  Build your Express App
-2.  Mount an API Router onto your app
-3.  Define the routes described below
-4.  Define controller functions for each of your routes (remember to use `.populate` for `created_by` and `belongs_to` fields that are mongo ids! This will be extremely useful when you are working on the front-end!)
-5.  You will also need to return a `comment_count` property on all your endpoints that return articles. Attempt it on a single article first, then apply it to your all articles endpoint and finally your post new article. This is a great challenge to help consolidate your understanding of promises. (Note: do __not__ change the models to have a `comment_count` value in the database!)
+1.  Build your Express App DONE
+2.  Mount an API Router onto your app DONE
+3.  Define the routes described below 
+4.  Define controller functions for each of your routes (remember to use `.populate` for `created_by` and `belongs_to` fields that are mongo ids! This will be extremely useful when you are working on the front-end!) DONE
+5.  You will also need to return a `comment_count` property on all your endpoints that return articles. Attempt it on a single article first, then apply it to your all articles endpoint and finally your post new article. This is a great challenge to help consolidate your understanding of promises. (Note: do __not__ change the models to have a `comment_count` value in the database!) DONE
 6.  Use proper project configuration from the offset, being sure to treat development and test differently.
 7.  Test each route as you go. Remember to test the happy and the unhappy paths! Make sure your error messages are helpful and your error status codes are chosen correctly. Remember to seed the test database using the seeding function and make the saved data available to use within your test suite.
 
@@ -60,12 +60,12 @@ GET /api
 ```
 
 ```http
-GET /api/topics
+GET /api/topics DONE
 # Get all the topics
 ```
 
 ```http
-GET /api/topics/:topic_slug/articles
+GET /api/topics/:topic_slug/articles DONE
 # Return all the articles for a certain topic
 # e.g: `/api/topics/football/articles`
 ```
@@ -77,40 +77,40 @@ POST /api/topics/:topic_slug/articles
 ```
 
 ```http
-GET /api/articles
+GET /api/articles DONE
 # Returns all the articles
 ```
 
 ```http
-GET /api/articles/:article_id
+GET /api/articles/:article_id DONE
 # Get an individual article
 ```
 
 ```http
-GET /api/articles/:article_id/comments
+GET /api/articles/:article_id/comments DONE
 # Get all the comments for a individual article
 ```
 
 ```http
-POST /api/articles/:article_id/comments
+POST /api/articles/:article_id/comments 
 # Add a new comment to an article. This route requires a JSON body with body and created_by key value pairs
 # e.g: `{"body": "This is my new comment", "created_by": "user_id goes here"}`
 ```
 
 ```http
-PATCH /api/articles/:article_id
+PATCH /api/articles/:article_id NOT WORKING
 # Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down'
 # e.g: `/api/articles/:article_id?vote=up`
 ```
 
 ```http
-PATCH /api/comments/:comment_id
+PATCH /api/comments/:comment_id NOT WORKING
 # Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down'
 # e.g: `/api/comments/:comment_id?vote=down`
 ```
 
 ```http
-DELETE /api/comments/:comment_id
+DELETE /api/comments/:comment_id DONE
 # Deletes a comment
 ```
 
