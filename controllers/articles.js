@@ -69,7 +69,11 @@ exports.addCommentToArticle = (req, res, next) => {
   newComment.populate('created_by')
     .populate('belongs_to').execPopulate()
     .then(comment => {
+      // if (!comment.created_by || !comment.belongs_to) {
+      //   return Promise.reject({ status: 404, msg: `Article not found for ID: ${articleID}` });
+      // } else {
       res.status(201).send({ comment })
+      // }
     })
     .catch(next)
 }

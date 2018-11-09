@@ -12,7 +12,12 @@ exports.getArticlesForTopic = (req, res, next) => {
   const topic = req.params.topic_slug;
   Article.find({ belongs_to: topic })
     .then(articles => {
-      res.status(200).send({ articles })
+      if (!articles) {
+        return Promise.reject({ status: 404, msg: `Articles not found for topic: ${topic}` });
+      }
+      else {
+        res.status(200).send({ articles })
+      }
     })
     .catch(next)
 }

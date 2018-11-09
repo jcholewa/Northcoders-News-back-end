@@ -15,6 +15,13 @@ app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
+app.use('/*', (req, res, next) => {
+  next({
+    status: 404,
+    msg: 'Page Not Found'
+  })
+});
+
 app.use((err, req, res, next) => {
   console.log(err)
   if (err.name === 'CastError') err.status = 400;

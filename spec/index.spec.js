@@ -151,6 +151,15 @@ describe('/api', () => {
             expect(comment.created_by.username).to.equal(userDocs[0].username)
           })
       })
+      // it('POST for an invalid ID returns a status 400 and error message', () => {
+      //   const id = '123'
+      //   return request
+      //     .patch(`/api/articles/${id}/comments`)
+      //     .expect(404)
+      //     .then(res => {
+      //       expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
+      //     })
+      // })
     })
   })
   describe('/users', () => {
@@ -203,6 +212,15 @@ describe('/api', () => {
           .expect(200)
           .then((res) => {
             expect(res.body.articles.length).to.equal(noOfArticles);
+          })
+      })
+      it('GET for a non-existent topic returns a status 404 and error message', () => {
+        const nonexistentTopic = 'hello'
+        return request
+          .patch(`/api/topics/${nonexistentTopic}/articles`)
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal(`Page Not Found`);
           })
       })
       it('POST returns status 201 and array containing new article', () => {
