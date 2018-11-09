@@ -104,6 +104,7 @@ describe('/api', () => {
           .expect(201)
           .then(({ body: { comment } }) => {
             expect(comment.body).to.equal(newComment.body);
+            expect(comment.created_by.username).to.equal(userDocs[0].username)
           })
       })
     })

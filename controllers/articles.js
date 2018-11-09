@@ -1,4 +1,4 @@
-const { Article, Comment } = require('../models')
+const { Article, Comment, User } = require('../models')
 
 exports.getArticles = (req, res, next) => {
   let count = 0;
@@ -62,7 +62,7 @@ exports.addCommentToArticle = (req, res, next) => {
     belongs_to: req.body.belongs_to,
     created_by: req.body.created_by
   })
-  return newComment.save()
+  newComment.populate('created_by').execPopulate()
     .then(comment => {
       res.status(201).send({ comment })
     })
