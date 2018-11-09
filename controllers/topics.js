@@ -16,7 +16,12 @@ exports.getArticlesForTopic = (req, res, next) => {
         return Promise.reject({ status: 404, msg: `Articles not found for topic: ${topic}` });
       }
       else {
+        Promise.all(articles.map(article => {
+          return article.populate('created_by').execPopulate()
+        }))
+        .then(articles => {
         res.status(200).send({ articles })
+        })
       }
     })
     .catch(next)

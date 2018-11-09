@@ -201,7 +201,7 @@ describe('/api', () => {
           expect(topics[0].slug).to.equal("mitch");
         })
     })
-    describe('/api/topics:topic_slug', () => {
+    describe('/api/topics/:topic_slug/articles', () => {
       it('GET returns status 200 and array of all articles with defined topic slug', () => {
         let noOfArticles;
 
@@ -219,6 +219,7 @@ describe('/api', () => {
           .expect(200)
           .then((res) => {
             expect(res.body.articles.length).to.equal(noOfArticles);
+            expect(res.body.articles[1].created_by).to.be.object();
           })
       })
       it('GET for a non-existent topic returns a status 404 and error message', () => {
