@@ -1,7 +1,7 @@
 const seedDB = require('./seed');
 const mongoose = require('mongoose');
 const DB_URL = require('../config');
-const data = require('../seed/devData/index');
+const data = require('./devData/index');
 
 mongoose.connect(DB_URL, { useNewUrlParser: true })
   .then(() => {
@@ -9,7 +9,7 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
     return seedDB(data)
   })
   .then(([userDocs, topicDocs, articleDocs, commentDocs]) => {
-    console.log(userDocs)
+    // console.log(userDocs)
     mongoose.disconnect();
   })
   .then(() => {
