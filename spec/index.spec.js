@@ -177,18 +177,19 @@ describe('/api', () => {
             expect(comment.belongs_to).to.be.object();
           })
       })
-      it('POST for invalid comment body returns status 400 and error message', () => {
+      it('POST for invalid comment body returns status 400 and error message, (addCommentToArticle)', () => {
         const newComment = {
-          body: {test: 'testy test test'},
+          body: { test: 'testy test test' },
           votes: 2,
           belongs_to: articleDocs[0]._id,
           created_by: userDocs[0]._id
         }
         return request
           .post(`/api/articles/${articleDocs[0]}/comments`)
+          .send(newComment)
           .expect(400)
           .then(res => {
-            expect(res.body.msg).to.equal('comments validation failed: body: Path `body` is required., belongs_to: Path `belongs_to` is required., created_by: Path `created_by` is required.')
+            expect(res.body.msg).to.equal('comments validation failed: body: Cast to String failed for value "{ test: \'testy test test\' }" at path "body"')
           })
       })
     })
