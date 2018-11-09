@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const { expect } = require('chai');
 const seedDB = require('../seed/seed');
 const data = require('../seed/testData');
-const { Article } = require('../models');
 const chai = require('chai');
 const asserttype = require('chai-asserttype');
 chai.use(asserttype);
@@ -75,8 +74,6 @@ describe('/api', () => {
             expect(res.body.article.topic).to.equal(articleDocs[0].topic)
             expect(res.body.article.body).to.equal(articleDocs[0].body)
             expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
-            // CHANGE THESE SO NOT HARDCODED IN
-            expect(res.body.article.created_by.username).to.equal('butter_bridge');
           })
       })
       it('GET for an invalid ID returns a status 400 and error message, (getOneArticle)', () => {
@@ -140,8 +137,7 @@ describe('/api', () => {
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
           .expect(200)
           .then(res => {
-            // CHANGE THIS SO IT's NOT HARDCODED IN
-            expect(res.body.comments.length).to.equal(2);
+            expect(res.body.comments.length).to.equal(commentObj[articleDocs[0]._id]);
             expect(res.body.comments[0].created_by).to.be.object();
             expect(res.body.comments[1].belongs_to).to.be.object();
           })
@@ -222,13 +218,12 @@ describe('/api', () => {
         .expect(200)
         .then(({ body: { topics } }) => {
           expect(topics.length).to.equal(topicDocs.length);
-          expect(topics[1].title).to.equal("Cats");
-          expect(topics[0].slug).to.equal("mitch");
+          expect(topics[1].title).to.equal(topicDocs[1].title);
+          expect(topics[0].slug).to.equal(topicDocs[0].slug);
         })
     })
     describe('/api/topics/:topic_slug/articles', () => {
       it('GET returns status 200 and array of all articles with defined topic slug, (getArticlesForTopic)', () => {
-
         return request
           .get(`/api/topics/${topicDocs[1].slug}/articles`)
           .expect(200)
@@ -236,7 +231,6 @@ describe('/api', () => {
             expect(res.body.articles.length).to.equal(articleObj[topicDocs[1].slug]);
             expect(res.body.articles[1].created_by).to.be.object();
             expect(res.body.articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
-
           })
       })
       it('GET for a non-existent topic returns a status 404 and error message, (getArticlesForTopic)', () => {
