@@ -118,6 +118,23 @@ describe('/api', () => {
             expect(res.body.comments.length).to.equal(2);
           })
       })
+      it('GET for an invalid article ID returns a status 400 and error message', () => {
+        const id = '123'
+        return request
+          .get(`/api/articles/${id}/comments`)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "belongs_to" for model "comments"`);
+          })
+      })
+      it('GET for a non-existent ID returns a status 404 and error message', () => {
+        return request
+          .get(`/api/articles/${wrongID}`)
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal(`Article not found for ID: ${wrongID}`);
+          })
+      })
       it('POST returns status 201 and array containing new comment', () => {
         const newComment = {
           body: "This is a new comment for the article",
