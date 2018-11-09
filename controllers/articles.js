@@ -4,11 +4,15 @@ exports.getArticles = (req, res, next) => {
   Article.find()
     .then(foundArticles => {
       return Promise.all(foundArticles.map(article => {
-        return Comment.count({ belongs_to: article._id })
-          .then(count => {
-            article = article.toJSON();
-            article["comment_count"] = count;
-            return article;
+        return article.populate('created_by')
+          .execPopulate()
+          .then(article => {
+            return Comment.count({ belongs_to: article._id })
+              .then(count => {
+                article = article.toJSON();
+                article["comment_count"] = count;
+                return article;
+              })
           })
       }))
     })
