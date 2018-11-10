@@ -261,6 +261,23 @@ describe('/api', () => {
           expect(res.body.comment.votes).to.equal(commentDocs[0].votes - 1)
         })
     })
+    it('PATCH for an invalid ID returns a status 400 and error message, (changeVotesOfComment)', () => {
+      const id = '123'
+      return request
+        .patch(`/api/comments/${id}?vote=up`)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "comments"`);
+        })
+    })
+    it('PATCH for a non-existent ID returns a status 404 and error message, (changeVotesOfComment)', () => {
+      return request
+        .patch(`/api/comments/${wrongID}?vote=up`)
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal(`Comment not found for ID: ${wrongID}`);
+        })
+    })
     it('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
       return request
         .delete(`/api/comments/${commentDocs[0]._id}`)
