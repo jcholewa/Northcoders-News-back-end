@@ -79,16 +79,13 @@ Explain what these tests test and why
 Give an example
 
 ## Built With
-Express - web framework
-MongoDB & Mongoose - database
-mLab - database seeding service
-Heroku - hosting service
+* [Express](https://expressjs.com/) - web framework
+* [MongoDB]{https://www.mongodb.com/} & [Mongoose](https://mongoosejs.com/docs/) - database
+* [mLab](https://mlab.com/) - database seeding service
+* [Heroku](https://heroku.com/) - hosting service
 
 ## Author
 Joanna Cholewa
-
-## License
-This project is licensed under the MIT License - see the LICENSE.md file for details
 
 ## Acknowledgments
 Northcoders tutors
