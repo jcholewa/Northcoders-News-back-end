@@ -16,7 +16,8 @@
     "body-parser": "^1.18.3",
     "chai-asserttype": "^1.0.5",
     "express": "^4.16.4",
-    "mongoose": "^5.3.10"
+    "mongoose": "^5.3.10",
+    "window": "^4.2.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",

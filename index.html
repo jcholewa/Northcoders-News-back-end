@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Northcoders News</title>
+</head>
+
+<body>
+  <h2>Endpoints for Northcoders News</h2>
+
+  <h3>GET /api </h3>
+  <p>Serves an HTML page with documentation for all the available endpoints </p>
+
+  <h3>GET /api/topics </h3>
+  <p>Get all the topics</p>
+
+  <h3>GET /api/topics/:topic_slug/articles</h3>
+  <p>Return all the articles for a certain topic</p>
+
+  <h3>POST /api/topics/:topic_slug/articles</h3>
+  <p>Add a new article to a topic.</p>
+
+  <h3>GET /api/articles</h3>
+  <p>Returns all the articles</p>
+
+  <h3>GET /api/articles/:article_id</h3>
+  <p>Get an individual article</p>
+
+  <h3>GET /api/articles/:article_id/comments</h3>
+  <p>Get all the comments for a individual article</p>
+
+  <h3>POST /api/articles/:article_id/comments</h3>
+  <p>Add a new comment to an article. </p>
+
+  <h3>PATCH /api/articles/:article_id </h3>
+  <p>Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down'</p>
+
+  <h3>PATCH /api/comments/:comment_id</h3>
+  <p>Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down'</p>
+
+  <h3>DELETE /api/comments/:comment_id </h3>
+  <p>Deletes a comment</p>
+
+  <h3>GET /api/users/:username</h3>
+  <p>Returns a JSON object with the profile data for the specified user.</p>
+
+</body>
+
+</html>

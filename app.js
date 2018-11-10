@@ -24,7 +24,7 @@ app.use('/*', (req, res, next) => {
 
 app.use((err, req, res, next) => {
   // console.log('here')
-  // console.log(err)
+  console.log(err)
   if (err.name === 'CastError') err.status = 400;
   if (err.name === 'ValidationError') err.status = 400;
   res.status(err.status).send({ msg: err.message || err.msg });
