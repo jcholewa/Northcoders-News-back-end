@@ -79,6 +79,6 @@ The tests test each endpoint (see https://jc-northcoders-news.herokuapp.com/api 
 Joanna Cholewa
 
 ## Acknowledgments
-Northcoders tutors
+[Northcoders](https://northcoders.com/) tutors
 
-Purple Booth provided a README template: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2 
+[Purple Booth](https://purplebooth.co.uk/) provided a README template: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2 
