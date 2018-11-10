@@ -192,6 +192,52 @@ describe('/api', () => {
             expect(res.body.msg).to.equal('comments validation failed: body: Cast to String failed for value "{ test: \'testy test test\' }" at path "body"')
           })
       })
+      it('POST for invalid comment votes returns status 400 and error message, (addCommentToArticle)', () => {
+        const newComment = {
+          body: 'This is a new comment for the article',
+          votes: 'hello',
+          belongs_to: articleDocs[0]._id,
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .send(newComment)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('comments validation failed: votes: Cast to Number failed for value "hello" at path "votes"');
+          })
+      })
+      it('POST for invalid comment created_by user ID returns status 400 and error message, (addCommentToArticle)', () => {
+        const newComment = {
+          body: 'This is a new comment for the article',
+          votes: 2,
+          belongs_to: articleDocs[0]._id,
+          created_by: 1234
+        }
+        return request
+          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .send(newComment)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('comments validation failed: created_by: Cast to ObjectID failed for value "1234" at path "created_by"');
+          })
+      })
+      it('POST for an invalid article ID returns a status 400 and error message, (addCommentToArticle)', () => {
+        const id = '123'
+        const newComment = {
+          body: "This is a new comment for the article",
+          votes: 2,
+          belongs_to: 123,
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/articles/${id}/comments`)
+          .send(newComment)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal(`comments validation failed: belongs_to: Cast to ObjectID failed for value "123" at path "belongs_to"`);
+          })
+      })
     })
   })
   describe('/topics', () => {
@@ -287,7 +333,7 @@ describe('/api', () => {
             expect(res.body.msg).to.equal('articles validation failed: votes: Cast to Number failed for value "hello" at path "votes"');
           })
       })
-      it('POST for invalid article created_by returns status 400 and error message, (addArticleToTopic)', () => {
+      it('POST for invalid article created_by user ID returns status 400 and error message, (addArticleToTopic)', () => {
         const newArticle = {
           title: 'New Article',
           body: 'Here is some content for the new article',
