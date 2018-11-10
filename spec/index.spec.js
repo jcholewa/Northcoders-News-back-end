@@ -242,6 +242,66 @@ describe('/api', () => {
             expect(article.created_by).to.be.object();
           })
       })
+      it('POST for invalid article body returns status 400 and error message, (addArticleToTopic)', () => {
+        const newArticle = {
+          title: 'New Article',
+          body: { writing: 'Here is some content for the new article' },
+          votes: 5,
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/topics/${topicDocs[1].slug}/articles`)
+          .send(newArticle)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('articles validation failed: body: Cast to String failed for value "{ writing: \'Here is some content for the new article\' }" at path "body"');
+          })
+      })
+      it('POST for invalid article title returns status 400 and error message, (addArticleToTopic)', () => {
+        const newArticle = {
+          title: { title: 'Heading' },
+          body: 'Here is some content for the new article',
+          votes: 5,
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/topics/${topicDocs[1].slug}/articles`)
+          .send(newArticle)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('articles validation failed: title: Cast to String failed for value "{ title: \'Heading\' }" at path "title"');
+          })
+      })
+      it('POST for invalid article votes returns status 400 and error message, (addArticleToTopic)', () => {
+        const newArticle = {
+          title: 'New Article',
+          body: 'Here is some content for the new article',
+          votes: 'hello',
+          created_by: userDocs[0]._id
+        }
+        return request
+          .post(`/api/topics/${topicDocs[1].slug}/articles`)
+          .send(newArticle)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('articles validation failed: votes: Cast to Number failed for value "hello" at path "votes"');
+          })
+      })
+      it('POST for invalid article created_by returns status 400 and error message, (addArticleToTopic)', () => {
+        const newArticle = {
+          title: 'New Article',
+          body: 'Here is some content for the new article',
+          votes: 5,
+          created_by: 1234,
+        }
+        return request
+          .post(`/api/topics/${topicDocs[1].slug}/articles`)
+          .send(newArticle)
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('articles validation failed: created_by: Cast to ObjectID failed for value "1234" at path "created_by"');
+          })
+      })
     })
   })
   describe('/comments', () => {
