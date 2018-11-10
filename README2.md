@@ -31,7 +31,7 @@ git clone clonedurl
 
 Open the project.
 
-Within the project, you will need to install the following npm packages:
+Within the project, you will need to install the following [npm](https://www.npmjs.com/) packages:
   * nodemon
   * express
   * mongoose
@@ -43,7 +43,7 @@ Within the project, you will need to install the following npm packages:
 This can be done by opening a terminal and typing:
 
 ```http
-npm i- nodemon express mongoose chai chai-asserttype mocha supertest
+npm i nodemon express mongoose chai chai-asserttype mocha supertest
 ```
 
 Once these steps are completed, you can run the tests, as described below, or open the project in a developer environment using the terminal command:
@@ -51,7 +51,7 @@ Once these steps are completed, you can run the tests, as described below, or op
 ```http
 npm run dev
 ```
-If you would like to seed the database in addition to running in developer mode, replace this with the command:
+If you would like to seed the database in addition to running in developer mode, replace the above with the command:
 
 ```http
 npm run seed:dev
