@@ -3,7 +3,8 @@ const app = express();
 const mongoose = require('mongoose');
 const DB_URL = process.env.DB_URL || require('./config');
 const bodyParser = require('body-parser');
-const apiRouter = require('./routes/api')
+const apiRouter = require('./routes/api');
+const path = require('path');
 
 mongoose.connect(DB_URL, { useNewUrlParser: true })
   .then(() => {
@@ -13,7 +14,9 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
 
 app.use(bodyParser.json());
 
-app.use('/api', apiRouter);
+app.use('/api', (req,res, next) => {
+  res.status(200).sendFile( `${process.env.PWD}/index.html`)
+})
 
 app.use('/*', (req, res, next) => {
   next({
@@ -23,12 +26,9 @@ app.use('/*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  // console.log('here')
-  console.log(err)
   if (err.name === 'CastError') err.status = 400;
   if (err.name === 'ValidationError') err.status = 400;
   res.status(err.status).send({ msg: err.message || err.msg });
-  // add in default case with 500
 })
 
 module.exports = app;
