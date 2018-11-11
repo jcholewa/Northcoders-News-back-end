@@ -14,9 +14,7 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
 
 app.use(bodyParser.json());
 
-app.use('/api', (req,res, next) => {
-  res.status(200).sendFile( `${process.env.PWD}/index.html`)
-})
+app.use('/api')
 
 app.use('/*', (req, res, next) => {
   next({
