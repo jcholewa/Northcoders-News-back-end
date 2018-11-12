@@ -42,18 +42,9 @@ describe('/api', () => {
   after(() => {
     return mongoose.disconnect();
   })
-  it.only('GET returns documentation page of all available endpoints', () => {
-    return request
-      .get('/api')
-      .expect(200)
-      .then(res => {
-        expect(res.body).to.equal('no idea');
-      })
-  })
   it('GET for a non-existent path returns status 404 and error message', () => {
-    const search = "artices"
     return request
-      .get(`/api/${search}`)
+      .get(`/api/artices`)
       .expect(404)
       .then(res => {
         expect(res.body.msg).to.equal('Page Not Found')
