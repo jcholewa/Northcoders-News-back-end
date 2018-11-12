@@ -8,9 +8,8 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
     console.log(`connected to ${DB_URL}`)
     return seedDB(data)
   })
-  .then(([userDocs, topicDocs, articleDocs, commentDocs]) => {
-    // console.log(userDocs)
-    mongoose.disconnect();
+  .then(() => {
+    return mongoose.disconnect();
   })
   .then(() => {
     console.log('successfully disconnected');
