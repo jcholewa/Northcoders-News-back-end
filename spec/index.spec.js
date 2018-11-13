@@ -162,11 +162,10 @@ describe('/api', () => {
         const newComment = {
           body: "This is a new comment for the article",
           votes: 2,
-          belongs_to: articleDocs[0]._id,
           created_by: userDocs[0]._id
         }
         return request
-          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .post(`/api/articles/${articleDocs[0]._id}/comments`)
           .send(newComment)
           .expect(201)
           .then(({ body: { comment } }) => {
@@ -180,11 +179,10 @@ describe('/api', () => {
         const newComment = {
           body: { test: 'testy test test' },
           votes: 2,
-          belongs_to: articleDocs[0]._id,
           created_by: userDocs[0]._id
         }
         return request
-          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .post(`/api/articles/${articleDocs[0]._id}/comments`)
           .send(newComment)
           .expect(400)
           .then(res => {
@@ -195,11 +193,10 @@ describe('/api', () => {
         const newComment = {
           body: 'This is a new comment for the article',
           votes: 'hello',
-          belongs_to: articleDocs[0]._id,
           created_by: userDocs[0]._id
         }
         return request
-          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .post(`/api/articles/${articleDocs[0]._id}/comments`)
           .send(newComment)
           .expect(400)
           .then(res => {
@@ -210,11 +207,10 @@ describe('/api', () => {
         const newComment = {
           body: 'This is a new comment for the article',
           votes: 2,
-          belongs_to: articleDocs[0]._id,
           created_by: 1234
         }
         return request
-          .post(`/api/articles/${articleDocs[0]}/comments`)
+          .post(`/api/articles/${articleDocs[0]._id}/comments`)
           .send(newComment)
           .expect(400)
           .then(res => {
@@ -226,7 +222,6 @@ describe('/api', () => {
         const newComment = {
           body: "This is a new comment for the article",
           votes: 2,
-          belongs_to: 123,
           created_by: userDocs[0]._id
         }
         return request

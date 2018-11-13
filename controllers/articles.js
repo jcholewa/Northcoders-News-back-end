@@ -59,7 +59,7 @@ exports.addCommentToArticle = (req, res, next) => {
   const newComment = new Comment({
     body: req.body.body,
     votes: req.body.votes,
-    belongs_to: req.body.belongs_to,
+    belongs_to: req.params.article_id,
     created_by: req.body.created_by
   })
   Comment.create(newComment)
