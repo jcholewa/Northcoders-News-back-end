@@ -68,11 +68,11 @@ describe('/api', () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}`)
           .expect(200)
-          .then(res => {
-            expect(res.body.article.title).to.equal(articleDocs[0].title)
-            expect(res.body.article.topic).to.equal(articleDocs[0].topic)
-            expect(res.body.article.body).to.equal(articleDocs[0].body)
-            expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
+          .then(({ body: { article } }) => {
+            expect(article.title).to.equal(articleDocs[0].title)
+            expect(article.topic).to.equal(articleDocs[0].topic)
+            expect(article.body).to.equal(articleDocs[0].body)
+            expect(article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
           })
       })
       it('GET for an invalid ID returns a status 400 and error message, (getOneArticle)', () => {
@@ -80,36 +80,36 @@ describe('/api', () => {
         return request
           .get(`/api/articles/${id}`)
           .expect(400)
-          .then(res => {
-            expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
           })
       })
       it('GET for an non-existent ID returns a status 404 and error message (getOneArticle)', () => {
         return request
           .get(`/api/articles/${wrongID}`)
           .expect(404)
-          .then(res => {
-            expect(res.body.msg).to.equal(`Article not found for ID: ${wrongID}`);
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`Article not found for ID: ${wrongID}`);
           })
       })
       it('PATCH returns status 204 and array containing updated article with votes minus 1, (changeVotesOfArticle)', () => {
         return request
           .patch(`/api/articles/${articleDocs[0]._id}?vote=down`)
           .expect(200)
-          .then(res => {
-            expect(res.body.article.title).to.equal(articleDocs[0].title);
-            expect(res.body.article.votes).to.equal(articleDocs[0].votes - 1);
-            expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
+          .then(({ body: { article } }) => {
+            expect(article.title).to.equal(articleDocs[0].title);
+            expect(article.votes).to.equal(articleDocs[0].votes - 1);
+            expect(article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
           })
       })
       it('PATCH returns status 200 and array containing updated article with votes plus 1, (changeVotesOfArticle)', () => {
         return request
           .patch(`/api/articles/${articleDocs[0]._id}?vote=up`)
           .expect(200)
-          .then(res => {
-            expect(res.body.article.title).to.equal(articleDocs[0].title);
-            expect(res.body.article.votes).to.equal(articleDocs[0].votes + 1);
-            expect(res.body.article.comment_count).to.equal(commentObj[articleDocs[0]._id])
+          .then(({ body: { article } }) => {
+            expect(article.title).to.equal(articleDocs[0].title);
+            expect(article.votes).to.equal(articleDocs[0].votes + 1);
+            expect(article.comment_count).to.equal(commentObj[articleDocs[0]._id])
           })
       })
       it('PATCH for an invalid ID returns a status 400 and error message, (changeVotesOfArticle)', () => {
@@ -117,16 +117,16 @@ describe('/api', () => {
         return request
           .patch(`/api/articles/${id}?vote=up`)
           .expect(400)
-          .then(res => {
-            expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "articles"`);
           })
       })
       it('PATCH for a non-existent ID returns a status 404 and error message, (changeVotesOfArticle)', () => {
         return request
           .patch(`/api/articles/${wrongID}?vote=up`)
           .expect(404)
-          .then(res => {
-            expect(res.body.msg).to.equal(`Article not found for ID: ${wrongID}`);
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`Article not found for ID: ${wrongID}`);
           })
       })
     })
@@ -255,10 +255,10 @@ describe('/api', () => {
         return request
           .get(`/api/topics/${topicDocs[1].slug}/articles`)
           .expect(200)
-          .then((res) => {
-            expect(res.body.articles.length).to.equal(articleObj[topicDocs[1].slug]);
-            expect(res.body.articles[1].created_by).to.be.object();
-            expect(res.body.articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
+          .then(({ body: { articles } }) => {
+            expect(articles.length).to.equal(articleObj[topicDocs[1].slug]);
+            expect(articles[1].created_by).to.be.object();
+            expect(articles[0].comment_count).to.equal(commentObj[articleDocs[0]._id]);
           })
       })
       it('GET for a non-existent topic returns a status 404 and error message, (getArticlesForTopic)', () => {
@@ -266,8 +266,8 @@ describe('/api', () => {
         return request
           .patch(`/api/topics/${nonexistentTopic}/articles`)
           .expect(404)
-          .then(res => {
-            expect(res.body.msg).to.equal(`Page Not Found`);
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`Page Not Found`);
           })
       })
       it('POST returns status 201 and array containing new article, (addArticleToTopic)', () => {
@@ -298,8 +298,8 @@ describe('/api', () => {
           .post(`/api/topics/${topicDocs[1].slug}/articles`)
           .send(newArticle)
           .expect(400)
-          .then(res => {
-            expect(res.body.msg).to.equal('articles validation failed: body: Cast to String failed for value "{ writing: \'Here is some content for the new article\' }" at path "body"');
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal('articles validation failed: body: Cast to String failed for value "{ writing: \'Here is some content for the new article\' }" at path "body"');
           })
       })
       it('POST for invalid article title returns status 400 and error message, (addArticleToTopic)', () => {
@@ -313,8 +313,8 @@ describe('/api', () => {
           .post(`/api/topics/${topicDocs[1].slug}/articles`)
           .send(newArticle)
           .expect(400)
-          .then(res => {
-            expect(res.body.msg).to.equal('articles validation failed: title: Cast to String failed for value "{ title: \'Heading\' }" at path "title"');
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal('articles validation failed: title: Cast to String failed for value "{ title: \'Heading\' }" at path "title"');
           })
       })
       it('POST for invalid article votes returns status 400 and error message, (addArticleToTopic)', () => {
@@ -328,8 +328,8 @@ describe('/api', () => {
           .post(`/api/topics/${topicDocs[1].slug}/articles`)
           .send(newArticle)
           .expect(400)
-          .then(res => {
-            expect(res.body.msg).to.equal('articles validation failed: votes: Cast to Number failed for value "hello" at path "votes"');
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal('articles validation failed: votes: Cast to Number failed for value "hello" at path "votes"');
           })
       })
       it('POST for invalid article created_by user ID returns status 400 and error message, (addArticleToTopic)', () => {
@@ -343,8 +343,8 @@ describe('/api', () => {
           .post(`/api/topics/${topicDocs[1].slug}/articles`)
           .send(newArticle)
           .expect(400)
-          .then(res => {
-            expect(res.body.msg).to.equal('articles validation failed: created_by: Cast to ObjectID failed for value "1234" at path "created_by"');
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal('articles validation failed: created_by: Cast to ObjectID failed for value "1234" at path "created_by"');
           })
       })
     })
@@ -354,16 +354,16 @@ describe('/api', () => {
       return request
         .patch(`/api/comments/${commentDocs[0]._id}?vote=up`)
         .expect(200)
-        .then(res => {
-          expect(res.body.comment.votes).to.equal(commentDocs[0].votes + 1)
+        .then(({ body: { comment } }) => {
+          expect(comment.votes).to.equal(commentDocs[0].votes + 1)
         })
     })
     it('PATCH returns status 200 and array containing updated comment with votes minus 1, (changeVotesOfComment)', () => {
       return request
         .patch(`/api/comments/${commentDocs[0]._id}?vote=down`)
         .expect(200)
-        .then(res => {
-          expect(res.body.comment.votes).to.equal(commentDocs[0].votes - 1)
+        .then(({ body: { comment } }) => {
+          expect(comment.votes).to.equal(commentDocs[0].votes - 1)
         })
     })
     it('PATCH for an invalid ID returns a status 400 and error message, (changeVotesOfComment)', () => {
@@ -371,24 +371,24 @@ describe('/api', () => {
       return request
         .patch(`/api/comments/${id}?vote=up`)
         .expect(400)
-        .then(res => {
-          expect(res.body.msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "comments"`);
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal(`Cast to ObjectId failed for value "${id}" at path "_id" for model "comments"`);
         })
     })
     it('PATCH for a non-existent ID returns a status 404 and error message, (changeVotesOfComment)', () => {
       return request
         .patch(`/api/comments/${wrongID}?vote=up`)
         .expect(404)
-        .then(res => {
-          expect(res.body.msg).to.equal(`Comment not found for ID: ${wrongID}`);
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal(`Comment not found for ID: ${wrongID}`);
         })
     })
     it('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
       return request
         .delete(`/api/comments/${commentDocs[0]._id}`)
         .expect(200)
-        .then(res => {
-          expect(res.body.message).to.equal('comment deleted')
+        .then(({ body: { message } }) => {
+          expect(message).to.equal('comment deleted')
         })
     })
   })
@@ -398,10 +398,10 @@ describe('/api', () => {
         return request
           .get(`/api/users/${userDocs[0].username}`)
           .expect(200)
-          .then(res => {
-            expect(res.body.user.username).to.equal(userDocs[0].username);
-            expect(res.body.user.name).to.equal(userDocs[0].name);
-            expect(res.body.user.avatar_url).to.equal(userDocs[0].avatar_url)
+          .then(({ body: { user } }) => {
+            expect(user.username).to.equal(userDocs[0].username);
+            expect(user.name).to.equal(userDocs[0].name);
+            expect(user.avatar_url).to.equal(userDocs[0].avatar_url)
           })
       })
       it(`GET for an non-existent username returns a status 404 and error message, (getOneUser)`, () => {
@@ -409,8 +409,8 @@ describe('/api', () => {
         return request
           .get(`/api/users/${wrongUserName}`)
           .expect(404)
-          .then(res => {
-            expect(res.body.msg).to.equal(`User not found for username: ${wrongUserName}`);
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`User not found for username: ${wrongUserName}`);
           })
       })
     })

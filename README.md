@@ -29,7 +29,7 @@ git clone clonedurl
 
 Open the project in a text editor.
 
-Within the project, you will need to install the following [npm](https://www.npmjs.com/) packages:
+Within the project, the following [npm](https://www.npmjs.com/) packages are required:
   * nodemon
   * express
   * mongoose
@@ -41,7 +41,7 @@ Within the project, you will need to install the following [npm](https://www.npm
 This can be done by opening an integrated terminal and typing:
 
 http
-npm i nodemon express mongoose chai chai-asserttype mocha supertest
+npm i
 
 
 Once these steps are complete, you can open the project in a developer environment using the terminal command:
