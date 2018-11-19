@@ -102,7 +102,7 @@ describe('/api', () => {
             expect(article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
           })
       })
-      it('PATCH returns status 200 and array containing updated article with votes plus 1, (changeVotesOfArticle)', () => {
+      it.only('PATCH returns status 200 and array containing updated article with votes plus 1, (changeVotesOfArticle)', () => {
         return request
           .patch(`/api/articles/${articleDocs[0]._id}?vote=up`)
           .expect(200)
