@@ -40,13 +40,15 @@ exports.getOneArticle = (req, res, next) => {
     .catch(next)
 }
 
-
 exports.getCommentsForArticle = (req, res, next) => {
   const articleID = req.params.article_id;
   Comment.find({ belongs_to: articleID })
     .then(comments => {
       return Promise.all(comments.map(comment => {
-        return comment.populate('created_by').populate('belongs_to').execPopulate()
+        return comment.populate('created_by').populate({
+          path: 'belongs_to',
+          select: '_id, created_by, belongs_to'
+        }).execPopulate()
       }))
     })
     .then(comments => {
@@ -64,7 +66,10 @@ exports.addCommentToArticle = (req, res, next) => {
   })
   Comment.create(newComment)
     .then(comment => {
-      return comment.populate('created_by').populate('belongs_to')
+      return comment.populate('created_by').populate({
+        path: 'belongs_to',
+        select: '_id, created_by, belongs_to'
+      })
         .execPopulate()
     })
     .then(comment => {

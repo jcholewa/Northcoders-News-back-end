@@ -3,7 +3,10 @@ const { Comment } = require('../models');
 exports.changeVotesOfComment = (req, res, next) => {
   Comment.findById(req.params.comment_id)
     .populate('created_by')
-    .populate('belongs_to')
+    .populate({
+      path: 'belongs_to',
+      select: '_id, created_by, belongs_to'
+    })
     .then(foundComment => {
       if (!foundComment) return Promise.reject({ status: 404, msg: `Comment not found for ID: ${req.params.comment_id}` });
 
