@@ -135,10 +135,13 @@ describe('/api', () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
           .expect(200)
-          .then(res => {
-            expect(res.body.comments.length).to.equal(commentObj[articleDocs[0]._id]);
-            expect(res.body.comments[0].created_by).to.be.object();
-            expect(res.body.comments[1].belongs_to).to.be.object();
+          .then(({ body: { comments } }) => {
+            expect(comments.length).to.equal(commentObj[articleDocs[0]._id]);
+            expect(comments[0].created_by).to.be.object();
+            expect(comments[1].belongs_to).to.be.object();
+            // console.log(comments[0].belongs_to._id)
+            // console.log(articleDocs[0]._id)
+            // expect(comments[0].belongs_to._id).to.equal(articleDocs[0]._id);
           })
       })
       it('GET for an invalid article ID returns a status 400 and error message, (getCommentsForArticle)', () => {

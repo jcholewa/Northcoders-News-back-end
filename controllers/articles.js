@@ -1,4 +1,5 @@
-const { Article, Comment } = require('../models')
+const { Article, Comment } = require('../models');
+const { commentCount } = require('../utils');
 
 exports.getArticles = (req, res, next) => {
   Article.find()
@@ -30,16 +31,15 @@ exports.getOneArticle = (req, res, next) => {
     .then(article => {
       if (!article) return Promise.reject({ status: 404, msg: `Article not found for ID: ${articleID}` });
       else {
-        Comment.count({ belongs_to: articleID })
-          .then(comments => {
-            article = article.toJSON()
-            article["comment_count"] = comments;
+        commentCount(articleID, article)
+          .then(article => {
             res.status(200).send({ article })
           })
       }
     })
     .catch(next)
 }
+
 
 exports.getCommentsForArticle = (req, res, next) => {
   const articleID = req.params.article_id;
@@ -81,12 +81,10 @@ exports.changeVotesOfArticle = (req, res, next) => {
       else req.query.vote === 'down' ? foundArticle.votes-- : foundArticle.votes++
       return foundArticle.save()
         .then(article => {
-          Comment.count({ belongs_to: article._id })
-            .then(comments => {
-              article = article.toJSON()
-              article["comment_count"] = comments;
-              res.status(200).send({ article })
-            })
+          return commentCount(article._id, article)
+        })
+        .then(article => {
+          res.status(200).send({ article })
         })
     })
     .catch(next)

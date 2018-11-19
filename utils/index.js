@@ -1,3 +1,5 @@
+const { Comment } = require('../models')
+
 const formatTopics = (topicData) => {
   return topicData.map(topicDatum => {
     return { ...topicDatum }
@@ -5,7 +7,6 @@ const formatTopics = (topicData) => {
 }
 
 const formatUsers = (userData) => {
-  // console.log(userData)
   return userData.map(userDatum => {
     return { ...userDatum }
   })
@@ -41,4 +42,13 @@ const formatComments = (commentData, userRefObj, articleRefObj) => {
   })
 }
 
-module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments }
+const commentCount = (articleID, article) => {
+  return Comment.count({ belongs_to: articleID })
+    .then(count => {
+      article = article.toJSON();
+      article["comment_count"] = count;
+      return article;
+    })
+}
+
+module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments, commentCount }

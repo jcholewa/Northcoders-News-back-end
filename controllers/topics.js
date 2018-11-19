@@ -1,4 +1,5 @@
 const { Topic, Article, Comment } = require('../models');
+const { commentCount } = require('../utils');
 
 exports.getTopics = (req, res, next) => {
   Topic.find()
@@ -19,16 +20,11 @@ exports.getArticlesForTopic = (req, res, next) => {
         Promise.all(articles.map(article => {
           return article.populate('created_by').execPopulate()
             .then(article => {
-              return Comment.count({ belongs_to: article._id })
-                .then(count => {
-                  article = article.toJSON();
-                  article["comment_count"] = count;
-                  return article;
-                })
+              return commentCount(article._id, article)
             })
         }))
           .then(articles => {
-            res.status(200).send({ articles })
+            res.status(200).send({ articles });
           })
       }
     })
