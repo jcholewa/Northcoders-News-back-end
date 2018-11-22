@@ -20,8 +20,12 @@ exports.changeVotesOfComment = (req, res, next) => {
 }
 
 exports.deleteComment = (req, res, next) => {
-  Comment.findOneAndRemove({ id: req.params.comment_id })
-    .then(() => {
+  Comment.findByIdAndRemove({ _id: req.params.comment_id })
+    .then((comment) => {
+      if (!comment) return Promise.reject({ status: 404, msg: `Delete failed: comment not found for ID: ${req.params.comment_id}` });
+
       res.status(200).send({ message: 'comment deleted' })
+
     })
+    .catch(next)
 }

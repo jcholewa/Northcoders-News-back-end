@@ -102,7 +102,7 @@ describe('/api', () => {
             expect(article.comment_count).to.equal(commentObj[articleDocs[0]._id]);
           })
       })
-      it.only('PATCH returns status 200 and array containing updated article with votes plus 1, (changeVotesOfArticle)', () => {
+      it('PATCH returns status 200 and array containing updated article with votes plus 1, (changeVotesOfArticle)', () => {
         return request
           .patch(`/api/articles/${articleDocs[0]._id}?vote=up`)
           .expect(200)
@@ -381,12 +381,20 @@ describe('/api', () => {
           expect(msg).to.equal(`Comment not found for ID: ${wrongID}`);
         })
     })
-    it('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
+    it.only('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
       return request
         .delete(`/api/comments/${commentDocs[0]._id}`)
         .expect(200)
         .then(({ body: { message } }) => {
           expect(message).to.equal('comment deleted')
+        })
+    })
+    it.only('DELETE for a non-existent ID returns a status 404 and error message, (deleteComment)', () => {
+      return request
+        .delete(`/api/comments/${wrongID}`)
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal(`Delete failed: comment not found for ID: ${wrongID}`);
         })
     })
   })
