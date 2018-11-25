@@ -13,8 +13,8 @@ You will need to have MongoDB installed, and ensure that it is running in the ba
 Once installed, you can run it in the background using the following terminal command: 
 
 ```
-http
 mongod
+```
 
 
 ## Installing
@@ -26,8 +26,8 @@ Clone the project from GitHub by clicking the green "Clone or download" button a
 Navigate on your local machine's command line to the directory you want to clone the project into, and type:
 
 ```
-http
 git clone clonedurl
+```
 
 Open the project in a text editor.
 
@@ -43,29 +43,28 @@ Within the project, the following [npm](https://www.npmjs.com/) packages are req
 This can be done by opening an integrated terminal and typing:
 
 ```
-http
 npm i
+```
 
 
 Once these steps are complete, you can open the project in a developer environment using the terminal command:
 
 ```
-http
 npm run dev
+```
 
 If you would like to seed the database prior to running the project in developer mode, replace the above with the command:
 
 ```
-http
 npm run seed:dev
-
+```
 
 ## Running the tests
 To run the automated tests for this system, type:
 
 ```
-http
 npm test
+```
 
 into the command line.
 
