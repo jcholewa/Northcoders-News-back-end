@@ -1,5 +1,5 @@
 ## Northcoders News
-This project serves data from a MongoDB database containing fake news articles, topics, users and article comments. 
+This project serves data from a MongoDB database containing fake news articles, topics, users and article comments. It was built using MongoDB, Node, Express and Mongoose. 
 
 ### Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -16,7 +16,6 @@ Once installed, you can run it in the background using the following terminal co
 mongod
 ```
 
-
 ## Installing
 
 Fork this project on GitHub by clicking "Fork" in the top right of this GitHub page. This will fork it to your GitHub profile, creating a copy of the repository.
@@ -26,10 +25,12 @@ Clone the project from GitHub by clicking the green "Clone or download" button a
 Navigate on your local machine's command line to the directory you want to clone the project into, and type:
 
 ```
-git clone clonedurl
+git clone 
 ```
 
-Open the project in a text editor.
+followed by the copied URL.
+
+Next, open the project in a text editor.
 
 Within the project, the following [npm](https://www.npmjs.com/) packages are required:
   * nodemon
@@ -40,12 +41,30 @@ Within the project, the following [npm](https://www.npmjs.com/) packages are req
   * mocha
   * supertest
 
-This can be done by opening an integrated terminal and typing:
+These can be installed by opening an integrated terminal and typing:
 
 ```
 npm i
 ```
 
+You will also need to create a config.js file in the root directory, by typing the following into the integrated terminal:
+
+```
+touch config.js
+```
+
+Open config.js and copy the following into it:
+
+```
+process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
+
+const config = {
+  test: 'mongodb://localhost:27017/nc-news-test',
+  dev: 'mongodb://localhost:27017/nc-news'
+}
+
+module.exports = config[process.env.NODE_ENV];
+```
 
 Once these steps are complete, you can open the project in a developer environment using the terminal command:
 
