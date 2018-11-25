@@ -51,4 +51,17 @@ const commentCount = (articleID, article) => {
     })
 }
 
-module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments, commentCount }
+// creates a reference object for number of mentions (e.g. number of comments each topic slug has got)
+const createDocsRefObj = (docs) => {
+  return docs.reduce((refObj, doc) => {
+    if (refObj[doc.belongs_to] != undefined) {
+      refObj[doc.belongs_to] += 1;
+    }
+    else {
+      refObj[doc.belongs_to] = 1;
+    }
+    return refObj
+  }, {})
+}
+
+module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments, commentCount, createDocsRefObj }
