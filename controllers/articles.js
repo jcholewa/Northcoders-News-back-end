@@ -74,36 +74,19 @@ exports.addCommentToArticle = (req, res, next) => {
 }
 
 exports.changeVotesOfArticle = (req, res, next) => {
-  const voteToChange = req.query.vote === 'down' ? -1 : 1;
-  Article.findByIdAndUpdate(req.params.article_id, { $inc: { votes: voteToChange } })
+  Article.findById(req.params.article_id)
     .populate('created_by')
     .then(foundArticle => {
-      console.log(foundArticle)
-      if (!foundArticle) return Promise.reject({ status: 404, msg: `Article not found for ID: ${req.params.article_id}` })
-      else {
-        return commentCount(foundArticle._id, foundArticle)
-          .then(article => {
-            res.status(200).send({ article })
-          })
-      }
+      if (!foundArticle) return Promise.reject({ status: 404, msg: `Article not found for ID: ${req.params.article_id}` });
+      else req.query.vote === 'down' ? foundArticle.votes-- : foundArticle.votes++
+      return foundArticle.save()
+        .then(article => {
+          return commentCount(article._id, article)
+        })
+        .then(article => {
+          res.status(200).send({ article })
+        })
     })
     .catch(next)
 }
-
-// exports.changeVotesOfArticle = (req, res, next) => {
-//   Article.findById(req.params.article_id)
-//     .populate('created_by')
-//     .then(foundArticle => {
-//       if (!foundArticle) return Promise.reject({ status: 404, msg: `Article not found for ID: ${req.params.article_id}` });
-//       else req.query.vote === 'down' ? foundArticle.votes-- : foundArticle.votes++
-//       return foundArticle.save()
-//         .then(article => {
-//           return commentCount(article._id, article)
-//         })
-//         .then(article => {
-//           res.status(200).send({ article })
-//         })
-//     })
-//     .catch(next)
-// }
 
