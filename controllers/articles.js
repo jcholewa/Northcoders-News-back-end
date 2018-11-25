@@ -8,12 +8,7 @@ exports.getArticles = (req, res, next) => {
         return article.populate('created_by')
           .execPopulate()
           .then(article => {
-            return Comment.count({ belongs_to: article._id })
-              .then(count => {
-                article = article.toJSON();
-                article["comment_count"] = count;
-                return article;
-              })
+            return commentCount(article._id, article);
           })
       }))
     })

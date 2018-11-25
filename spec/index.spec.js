@@ -131,7 +131,7 @@ describe('/api', () => {
       })
     })
     describe('/articles/:article_id/comments', () => {
-      it('GET returns status 200 and array of comments for one article, (getCommentsForArticle)', () => {
+      it.only('GET returns status 200 and array of comments for one article, (getCommentsForArticle)', () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}/comments`)
           .expect(200)
@@ -140,7 +140,7 @@ describe('/api', () => {
             expect(comments[0].created_by).to.be.object();
             expect(comments[1].belongs_to).to.be.object();
             // console.log(comments[0].belongs_to._id)
-            // console.log(articleDocs[0]._id)
+            console.log(articleDocs[0]._id)
             // expect(comments[0].belongs_to._id).to.equal(articleDocs[0]._id);
           })
       })
@@ -381,7 +381,7 @@ describe('/api', () => {
           expect(msg).to.equal(`Comment not found for ID: ${wrongID}`);
         })
     })
-    it.only('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
+    it('DELETE returns status 200 and message confirming comment was deleted, (deleteComment)', () => {
       return request
         .delete(`/api/comments/${commentDocs[0]._id}`)
         .expect(200)
@@ -389,7 +389,7 @@ describe('/api', () => {
           expect(message).to.equal('comment deleted')
         })
     })
-    it.only('DELETE for a non-existent ID returns a status 404 and error message, (deleteComment)', () => {
+    it('DELETE for a non-existent ID returns a status 404 and error message, (deleteComment)', () => {
       return request
         .delete(`/api/comments/${wrongID}`)
         .expect(404)
