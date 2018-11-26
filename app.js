@@ -14,9 +14,9 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
 
 app.use(bodyParser.json());
 
-app.use('/api', apiRouter);
-
 app.use(cors())
+
+app.use('/api', apiRouter);
 
 app.use('/*', (req, res, next) => {
   next({
