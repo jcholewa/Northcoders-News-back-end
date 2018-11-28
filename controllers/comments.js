@@ -10,7 +10,7 @@ exports.changeVotesOfComment = (req, res, next) => {
     .then(foundComment => {
       if (!foundComment) return Promise.reject({ status: 404, msg: `Comment not found for ID: ${req.params.comment_id}` });
 
-      req.query.vote === 'down' ? foundComment.votes-- : foundComment.votes++
+      req.query.vote === 'up' ? foundComment.votes-- : foundComment.votes++
       return foundComment.save()
     })
     .then(comment => {
