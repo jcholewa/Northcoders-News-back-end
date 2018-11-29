@@ -8,7 +8,7 @@ const seedDB = require('../seed/seed');
 const data = require('../seed/testData');
 const chai = require('chai');
 const asserttype = require('chai-asserttype');
-const { createDocsRefObj } = require('../utils');
+const { createDocsRefObj, createAuthorRefObj } = require('../utils');
 chai.use(asserttype);
 
 describe('/api', () => {
@@ -405,5 +405,30 @@ describe('/api', () => {
           })
       })
     })
+    describe('/users/:username/articles ,(getArticlesForUser)', () => {
+      describe('/api/users/:username/articles', () => {
+        it('GET returns status 200 and array of all articles with defined user, (getArticlesForUser)', () => {
+          const commentRefObj = createDocsRefObj(commentDocs);
+          const userRefObj = createAuthorRefObj(articleDocs)
+          return request
+            .get(`/api/users/${userDocs[0].username}/articles`)
+            .expect(200)
+            .then(({ body: { articles } }) => {
+              expect(articles.length).to.equal(userRefObj[userDocs[0]._id]);
+              expect(articles[1].created_by).to.be.object();
+              expect(articles[0].comment_count).to.equal(commentRefObj[articleDocs[0]._id]);
+            })
+        })
+        it('GET for a non-existent user returns a status 404 and error message, (getArticlesForUser)', () => {
+          const nonexistentUser = 'hello'
+          return request
+            .patch(`/api/users/${nonexistentUser}/articles`)
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.equal(`Page Not Found`);
+            })
+        })
+    })
   })
+})
 })

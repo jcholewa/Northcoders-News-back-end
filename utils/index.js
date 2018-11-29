@@ -64,4 +64,17 @@ const createDocsRefObj = (docs) => {
   }, {})
 }
 
-module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments, commentCount, createDocsRefObj }
+const createAuthorRefObj = (docs) => {
+  console.log(docs[0].created_by)
+  return docs.reduce((refObj, doc) => {
+    if (refObj[doc.created_by] != undefined) {
+      refObj[doc.created_by] += 1;
+    }
+    else {
+      refObj[doc.created_by] = 1;
+    }
+    return refObj
+  }, {})
+}
+
+module.exports = { formatTopics, formatUsers, formatArticles, createRefObj, formatComments, commentCount, createDocsRefObj, createAuthorRefObj }
