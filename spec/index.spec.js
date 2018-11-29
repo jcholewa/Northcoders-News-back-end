@@ -114,6 +114,22 @@ describe('/api', () => {
             expect(msg).to.equal(`Article not found for ID: ${wrongID}`);
           })
       })
+      it('DELETE returns status 200 and message confirming article was deleted, (deleteArticle)', () => {
+        return request
+          .delete(`/api/articles/${articleDocs[0]._id}`)
+          .expect(200)
+          .then(({ body: { message } }) => {
+            expect(message).to.equal('article deleted')
+          })
+      })
+      it('DELETE for a non-existent ID returns a status 404 and error message, (deleteArticle)', () => {
+        return request
+          .delete(`/api/articles/${wrongID}`)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal(`Delete failed: article not found for ID: ${wrongID}`);
+          })
+      })
     })
     describe('/articles/:article_id/comments', () => {
       it('GET returns status 200 and array of comments for one article, (getCommentsForArticle)', () => {

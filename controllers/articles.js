@@ -90,3 +90,11 @@ exports.changeVotesOfArticle = (req, res, next) => {
     .catch(next)
 }
 
+exports.deleteArticle = (req, res, next) => {
+  Article.findByIdAndRemove({ _id: req.params.article_id })
+    .then(article => {
+      if (!article) return Promise.reject({ status: 404, msg: `Delete failed: article not found for ID: ${req.params.article_id}` });
+      res.status(200).send({ message: 'article deleted' })
+    })
+    .catch(next)
+}
